@@ -1,7 +1,10 @@
 {pkgs, ...}:
 
 {
-  fonts.fontconfig.enable = true;
+  fonts.fontconfig = {
+    enable = true;
+    antialiasing = true;
+  };
 
   home.packages = with pkgs; [
     # theme
@@ -10,7 +13,9 @@
     kdePackages.breeze-icons
     
     # think as fonts.package
-    nerd-fonts.fira-code
-    nerd-fonts.droid-sans-mono
+    nerd-fonts.symbols-only
+    noto-fonts-cjk-sans
+    noto-fonts-color-emoji
+    sarasa-gothic
   ];
 }
