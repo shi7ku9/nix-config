@@ -2,13 +2,12 @@
 
 {
   imports = [
-      ../../modules/system/systemd-boot.nix
-      ../../modules/system/networking.nix
-      ../../modules/system/locale.nix
-      ../../modules/services/sound-services.nix
-      ../../modules/services/bluetooth.nix
-      ../../modules/services/power-profile.nix
-      ../../profiles/steam.nix
+      ../../modules/nixos/system/systemd-boot.nix
+      ../../modules/nixos/system/networking.nix
+      ../../modules/nixos/system/locale.nix
+      ../../modules/nixos/services/sound-services.nix
+      ../../modules/nixos/services/bluetooth.nix
+      ../../modules/nixos/services/power-profile.nix
       
       ../../hosts/laptop/hardware.nix
   ];
