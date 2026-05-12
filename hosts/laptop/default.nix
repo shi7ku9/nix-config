@@ -1,4 +1,4 @@
-{pkgs, ... }:
+{ ... }:
 
 {
   imports = [
@@ -8,6 +8,7 @@
       ../../modules/nixos/services/sound-services.nix
       ../../modules/nixos/services/bluetooth.nix
       ../../modules/nixos/services/power-profile.nix
+      ../../modules/nixos/common-needed.nix
       
       ../../hosts/laptop/hardware.nix
   ];
@@ -20,10 +21,7 @@
 
   networking.hostName = "shiziku-laptop"; # Define your hostname.
 
-  environment.systemPackages = with pkgs; [
-    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    wget
-  ];
+  
 
 
   # This option defines the first version of NixOS you have installed on this particular machine,
