@@ -2,11 +2,16 @@
 
 {
   imports = [
-    ../../modules/user/programs/steam.nix
     ../../modules/user/desktop/dms
+
+    ../../profiles/gaming
   ];
   my.desktop.dms.enable = true;
   my.desktop.dms.users.shiziku.enable = true;
+
+  my.profiles.gaming.enable = true;
+  my.profiles.gaming.users.shiziku.enable = true;
+
   programs.zsh.enable = true;
 
   users.users.shiziku = {
