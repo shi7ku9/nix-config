@@ -3,10 +3,8 @@
 {
   imports = [
     ../../modules/user/zsh.nix
-    ../../modules/user/nixvim.nix
     ../../modules/user/input-method.nix
     ../../modules/user/icon-fonts.nix
-    
   ];
 
   home.username = "shiziku";
