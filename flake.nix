@@ -44,5 +44,10 @@
           ./user/shiziku
         ];
       };
+
+      checks.x86_64-linux = {
+        laptop =
+          self.nixosConfigurations.shiziku-laptop.config.system.build.toplevel;
+      };
     };
 }
