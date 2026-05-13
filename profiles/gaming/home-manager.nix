@@ -9,7 +9,7 @@
     vesktop
 
     # wine 
-    wineWow64Packages.stable
+    wineWow64Packages.stableFull
     winetricks
 
     # idk 
