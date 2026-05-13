@@ -1,4 +1,4 @@
-{pkgs, ...}:
+{ pkgs, ... }:
 
 {
   home.packages = with pkgs; [
@@ -8,10 +8,10 @@
     # discord
     vesktop
 
-    # wine 
+    # wine
     wineWow64Packages.stableFull
     winetricks
 
-    # idk 
+    # idk
   ];
 }

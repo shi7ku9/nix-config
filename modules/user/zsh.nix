@@ -1,11 +1,11 @@
-{pkgs, ...}:
+{ pkgs, ... }:
 
 {
   programs.git.enable = true; # zplug required git
   programs.starship = {
     enable = true;
 
-    presets = ["plain-text-symbols"];
+    presets = [ "plain-text-symbols" ];
   };
   programs.zsh = {
     enable = true;
@@ -13,13 +13,16 @@
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
 
-
     shellAliases = {
       ll = "exa -l";
     };
     history.size = 1000;
 
-    history.ignorePatterns = ["rm *" "pkill *" "cp *"];
+    history.ignorePatterns = [
+      "rm *"
+      "pkill *"
+      "cp *"
+    ];
 
     plugins = [
       {
@@ -35,7 +38,6 @@
         src = pkgs.zsh-fzf-tab;
       }
     ];
-    
 
     # initContent = ''
     #   eval "$(starship init zsh)"

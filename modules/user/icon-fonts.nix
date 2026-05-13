@@ -1,4 +1,4 @@
-{pkgs, ...}:
+{ pkgs, ... }:
 
 {
   fonts.fontconfig = {
@@ -11,7 +11,7 @@
     bibata-cursors
     hicolor-icon-theme
     kdePackages.breeze-icons
-    
+
     # think as fonts.package
     nerd-fonts.symbols-only
     noto-fonts-cjk-sans

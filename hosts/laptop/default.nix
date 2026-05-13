@@ -2,27 +2,27 @@
 
 {
   imports = [
-      ../../modules/nixos/system/systemd-boot.nix
-      ../../modules/nixos/system/networking.nix
-      ../../modules/nixos/system/locale.nix
-      ../../modules/nixos/services/sound-services.nix
-      ../../modules/nixos/services/bluetooth.nix
-      ../../modules/nixos/services/power-profile.nix
-      ../../modules/nixos/common-needed.nix
-      
-      ../../hosts/laptop/hardware.nix
+    ../../modules/nixos/system/systemd-boot.nix
+    ../../modules/nixos/system/networking.nix
+    ../../modules/nixos/system/locale.nix
+    ../../modules/nixos/services/sound-services.nix
+    ../../modules/nixos/services/bluetooth.nix
+    ../../modules/nixos/services/power-profile.nix
+    ../../modules/nixos/common-needed.nix
+
+    ../../hosts/laptop/hardware.nix
   ];
 
   nix = {
-    settings.experimental-features = [ "nix-command" "flakes" ];
+    settings.experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
   };
 
   services.flatpak.enable = true;
 
   networking.hostName = "shiziku-laptop"; # Define your hostname.
-
-  
-
 
   # This option defines the first version of NixOS you have installed on this particular machine,
   # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
@@ -44,4 +44,3 @@
   system.stateVersion = "25.11"; # Did you read the comment?
 
 }
-

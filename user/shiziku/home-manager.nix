@@ -1,4 +1,4 @@
-{pkgs, ...}:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -9,7 +9,6 @@
 
   home.username = "shiziku";
   home.homeDirectory = "/home/shiziku";
-
 
   home.packages = with pkgs; [
     # system monitor
@@ -42,7 +41,7 @@
     kitty
     firefox
     upower
-    
+
     # social blah blah blah
     vesktop
 
@@ -60,7 +59,7 @@
     settings = {
       user = {
         name = "shiziku";
-        email = "228161658+shi7ku9@users.noreply.github.com";  
+        email = "228161658+shi7ku9@users.noreply.github.com";
       };
     };
   };

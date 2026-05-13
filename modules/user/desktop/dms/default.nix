@@ -1,12 +1,14 @@
-{config, lib, pkgs, ...}:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.my.desktop.dms;
 
-  enbaledUser = 
-    lib.filterAttrs
-      (_: userCfg: userCfg.enable)
-      cfg.users;
+  enbaledUser = lib.filterAttrs (_: userCfg: userCfg.enable) cfg.users;
 in
 {
   options.my.desktop.dms = {
@@ -16,18 +18,20 @@ in
 
       type = lib.types.attrsOf (
 
-        lib.types.submodule({name, ...}: {
-          options = {
-            enable = lib.mkEnableOption "Enable DMS for ${name}";
-          };
+        lib.types.submodule (
+          { name, ... }:
+          {
+            options = {
+              enable = lib.mkEnableOption "Enable DMS for ${name}";
+            };
 
-        })
+          }
+        )
       );
 
       default = { };
     };
   };
-
 
   config = lib.mkIf cfg.enable {
     programs.hyprland.enable = true;
@@ -42,15 +46,12 @@ in
       enableSystemMonitoring = true;
     };
 
-    environment.systemPackages = with pkgs; [ 
+    environment.systemPackages = with pkgs; [
       kitty
       kdePackages.dolphin
     ];
 
-    home-manager.users = 
-      lib.mapAttrs
-        (name: _: import ./home-manager.nix)
-        enbaledUser;
+    home-manager.users = lib.mapAttrs (name: _: import ./home-manager.nix) enbaledUser;
   };
 }
 # programs.hyprland.enable = true;

@@ -11,27 +11,38 @@
 
   };
 
-  outputs = {self, nixpkgs, home-manager, ...}@inputs: {
-    nixosConfigurations.shiziku-laptop = 
-      nixpkgs.lib.nixosSystem {
+  outputs =
+    {
+      self,
+      nixpkgs,
+      home-manager,
+      ...
+    }@inputs:
+    let
+      systems = [ "x86_64-linux" ];
+      forAllSystems = nixpkgs.lib.genAttrs systems;
+    in
+    {
+      formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt-tree);
+      nixosConfigurations.shiziku-laptop = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
 
-        specialArgs = {inherit inputs;};
-        
+        specialArgs = { inherit inputs; };
+
         modules = [
           ./hosts/laptop
 
           # --- user ---
-          home-manager.nixosModules.home-manager 
-          
+          home-manager.nixosModules.home-manager
+
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
 
-            home-manager.extraSpecialArgs = {inherit inputs;};
+            home-manager.extraSpecialArgs = { inherit inputs; };
           }
           ./user/shiziku
         ];
       };
-   };
+    };
 }
