@@ -64,5 +64,12 @@
     };
   };
 
+  programs.nh = {
+    enable = true;
+    clean.enable = true;
+    clean.extraArgs = "--keep 6 --keep-since 7d";
+    flake = "/home/shiziku/.nixos";
+  };
+
   home.stateVersion = "26.05";
 }
