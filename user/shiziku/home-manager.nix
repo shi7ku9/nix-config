@@ -5,6 +5,7 @@
     ../../modules/user/zsh.nix
     ../../modules/user/input-method.nix
     ../../modules/user/icon-fonts.nix
+    ./default-applications.nix
   ];
 
   home.username = "shiziku";

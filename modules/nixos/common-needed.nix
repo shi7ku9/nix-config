@@ -18,5 +18,8 @@
     coreutils
 
     htop
+
+    icu
+
   ];
 }

@@ -21,6 +21,7 @@
     let
       systems = [ "x86_64-linux" ];
       forAllSystems = nixpkgs.lib.genAttrs systems;
+
     in
     {
       formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt-tree);
@@ -30,6 +31,7 @@
         specialArgs = { inherit inputs; };
 
         modules = [
+          { nixpkgs.config.allowUnfree = true; }
           ./hosts/laptop
 
           # --- user ---
@@ -46,8 +48,7 @@
       };
 
       checks.x86_64-linux = {
-        laptop =
-          self.nixosConfigurations.shiziku-laptop.config.system.build.toplevel;
+        laptop = self.nixosConfigurations.shiziku-laptop.config.system.build.toplevel;
       };
     };
 }
