@@ -9,46 +9,53 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    flake-parts.url = "github:hercules-ci/flake-parts";
+
+    import-tree.url = "github:denful/import-tree";
   };
 
   outputs =
-    {
-      self,
-      nixpkgs,
-      home-manager,
-      ...
-    }@inputs:
-    let
+    { flake-parts, self, ... }@inputs:
+    flake-parts.lib.mkFlake { inherit inputs; } {
+
       systems = [ "x86_64-linux" ];
-      forAllSystems = nixpkgs.lib.genAttrs systems;
+      imports = [
+        inputs.home-manager.flakeModules.home-manager
+        (inputs.import-tree ./modules)
+        (inputs.import-tree ./user)
+        (inputs.import-tree ./hosts)
+        (inputs.import-tree ./profiles)
+      ];
 
-    in
-    {
-      formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt-tree);
-      nixosConfigurations.shiziku-laptop = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-
-        specialArgs = { inherit inputs; };
-
-        modules = [
-          { nixpkgs.config.allowUnfree = true; }
-          ./hosts/laptop
-
-          # --- user ---
-          home-manager.nixosModules.home-manager
-
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-
-            home-manager.extraSpecialArgs = { inherit inputs; };
-          }
-          ./user/shiziku
-        ];
+      flake = {
+        nixosModules = {
+          accept-features = {
+            nix.settings.experimental-features = [
+              "nix-command"
+              "flakes"
+            ];
+          };
+          allow-unfree = {
+            nixpkgs.config.allowUnfree = true;
+          };
+        };
+        homeModules = {
+          allow-unfree = {
+            nixpkgs.config.allowUnfree = true;
+          };
+        };
       };
 
-      checks.x86_64-linux = {
-        laptop = self.nixosConfigurations.shiziku-laptop.config.system.build.toplevel;
-      };
+      perSystem =
+        { pkgs, ... }:
+        {
+          checks = {
+            nixos-test = self.nixosConfigurations.shiziku-laptop.config.system.build.toplevel;
+
+            home-test = self.homeConfigurations.shiziku.activationPackage;
+          };
+
+          formatter = pkgs.nixfmt-tree;
+        };
     };
 }

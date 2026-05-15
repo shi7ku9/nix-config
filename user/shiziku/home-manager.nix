@@ -1,76 +1,92 @@
-{ pkgs, ... }:
+{ inputs, self, ... }:
 
 {
-  imports = [
-    ../../modules/user/zsh.nix
-    ../../modules/user/input-method.nix
-    ../../modules/user/icon-fonts.nix
-    ./default-applications.nix
-  ];
+  flake.homeConfigurations.shiziku = inputs.home-manager.lib.homeManagerConfiguration {
+    pkgs = inputs.nixpkgs.legacyPackages."x86_64-linux";
+    modules = [
+      self.homeModules.allow-unfree
+      self.homeModules.user-shiziku
+    ];
+    extraSpecialArgs = { inherit inputs; };
+  };
 
-  home.username = "shiziku";
-  home.homeDirectory = "/home/shiziku";
+  flake.homeModules.user-shiziku =
+    { pkgs, ... }:
+    {
+      home.username = "shiziku";
+      home.homeDirectory = "/home/shiziku";
 
-  home.packages = with pkgs; [
-    # system monitor
-    fastfetch
-    btop
+      imports = [
+        self.homeModules.user-shiziku-default-applications
+        self.homeModules.desktop-dms
+        self.homeModules.profiles-gaming
 
-    # archive
-    zip
-    unzip
-    p7zip
-    zstd
-    gzip
-    bzip2
-    xz
+        self.homeModules.zsh
+        self.homeModules.input-method
+        self.homeModules.icon-fonts
+      ];
 
-    # network
-    curl
-    wget
-    netcat
-    traceroute
+      home.packages = with pkgs; [
+        # system monitor
+        fastfetch
+        btop
 
-    # utils
-    ripgrep
-    eza
-    sedutil
-    skim
-    util-linux
-    less
+        # archive
+        zip
+        unzip
+        p7zip
+        zstd
+        gzip
+        bzip2
+        xz
 
-    kitty
-    firefox
-    upower
+        # network
+        curl
+        wget
+        netcat
+        traceroute
 
-    # social blah blah blah
-    vesktop
+        # utils
+        ripgrep
+        eza
+        sedutil
+        skim
+        util-linux
+        less
 
-    # dev blah blah blah
-    git
+        kitty
+        firefox
+        upower
 
-    vscodium
-    nixd
-    nil
-    nixfmt
-  ];
+        # social blah blah blah
+        vesktop
 
-  programs.git = {
-    enable = true;
-    settings = {
-      user = {
-        name = "shiziku";
-        email = "228161658+shi7ku9@users.noreply.github.com";
+        # dev blah blah blah
+        git
+
+        vscodium
+        nixd
+        nil
+        nixfmt
+      ];
+
+      programs.git = {
+        enable = true;
+        settings = {
+          user = {
+            name = "shiziku";
+            email = "228161658+shi7ku9@users.noreply.github.com";
+          };
+        };
       };
+
+      programs.nh = {
+        enable = true;
+        clean.enable = true;
+        clean.extraArgs = "--keep 6 --keep-since 7d";
+        flake = "/home/shiziku/.nixos";
+      };
+
+      home.stateVersion = "26.05";
     };
-  };
-
-  programs.nh = {
-    enable = true;
-    clean.enable = true;
-    clean.extraArgs = "--keep 6 --keep-since 7d";
-    flake = "/home/shiziku/.nixos";
-  };
-
-  home.stateVersion = "26.05";
 }

@@ -1,32 +1,24 @@
-{ pkgs, ... }:
+{ self, ... }:
 
 {
   imports = [
-    ../../modules/user/desktop/dms
-
-    ../../profiles/gaming
+    ./home-manager.nix
   ];
-  my.desktop.dms.enable = true;
-  my.desktop.dms.users.shiziku.enable = true;
-
-  my.profiles.gaming.enable = true;
-  my.profiles.gaming.users.shiziku.enable = true;
-
-  programs.zsh.enable = true;
-
-  users.users.shiziku = {
-    isNormalUser = true;
-    extraGroups = [
-      "wheel"
-      "networkmanager"
-    ]; # Enable ‘sudo’ for the user.
-    shell = pkgs.zsh;
-  };
-
-  programs.appimage = {
-    enable = true;
-    binfmt = true;
-  };
-
-  home-manager.users.shiziku = import ./home-manager.nix;
+  flake.nixosModules.user-shiziku =
+    { pkgs, ... }:
+    {
+      imports = [
+        self.nixosModules.desktop-dms
+        self.nixosModules.profiles-gaming
+      ];
+      programs.zsh.enable = true;
+      users.users.shiziku = {
+        isNormalUser = true;
+        extraGroups = [
+          "wheel" # enable sudo
+          "networkmanager"
+        ];
+        shell = pkgs.zsh;
+      };
+    };
 }

@@ -1,43 +1,53 @@
-{
-  config,
-  lib,
-  modulesPath,
-  ...
-}:
+{ ... }:
 
 {
-  imports = [
-    (modulesPath + "/installer/scan/not-detected.nix")
-  ];
+  flake.nixosModules.host-shiziku-laptop =
+    {
+      config,
+      lib,
+      modulesPath,
+      ...
+    }:
 
-  boot.initrd.availableKernelModules = [
-    "xhci_pci"
-    "vmd"
-    "nvme"
-    "usb_storage"
-    "sd_mod"
-    "rtsx_usb_sdmmc"
-  ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-intel" ];
-  boot.extraModulePackages = [ ];
+    {
+      imports = [
+        (modulesPath + "/installer/scan/not-detected.nix")
+      ];
 
-  fileSystems."/" = {
-    device = "/dev/disk/by-label/NIXROOT";
-    fsType = "ext4";
-  };
+      boot.initrd.availableKernelModules = [
+        "xhci_pci"
+        "vmd"
+        "nvme"
+        "usb_storage"
+        "sd_mod"
+        "rtsx_usb_sdmmc"
+      ];
+      boot.initrd.kernelModules = [ ];
+      boot.kernelModules = [ "kvm-intel" ];
+      boot.extraModulePackages = [ ];
 
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-label/NIXBOOT";
-    fsType = "vfat";
-    options = [
-      "fmask=0022"
-      "dmask=0022"
-    ];
-  };
+      fileSystems."/" = {
+        device = "/dev/disk/by-label/NIXROOT";
+        fsType = "ext4";
+      };
 
-  swapDevices = [ ];
+      fileSystems."/boot" = {
+        device = "/dev/disk/by-label/NIXBOOT";
+        fsType = "vfat";
+        options = [
+          "fmask=0022"
+          "dmask=0022"
+        ];
+      };
 
-  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+      swapDevices = [
+        {
+          device = "/.swapfile";
+          size = 16 * 1024;
+        }
+      ];
+
+      nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+      hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+    };
 }

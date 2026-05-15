@@ -1,46 +1,86 @@
-{ ... }:
+{ inputs, self, ... }:
 
 {
-  imports = [
-    ../../modules/nixos/system/systemd-boot.nix
-    ../../modules/nixos/system/networking.nix
-    ../../modules/nixos/system/locale.nix
-    ../../modules/nixos/services/sound-services.nix
-    ../../modules/nixos/services/bluetooth.nix
-    ../../modules/nixos/services/power-profile.nix
-    ../../modules/nixos/common-needed.nix
-
-    ../../hosts/laptop/hardware.nix
-  ];
-
-  nix = {
-    settings.experimental-features = [
-      "nix-command"
-      "flakes"
+  flake.nixosConfigurations.shiziku-laptop = inputs.nixpkgs.lib.nixosSystem {
+    modules = [
+      self.nixosModules.accept-features
+      self.nixosModules.allow-unfree
+      self.nixosModules.host-shiziku-laptop
     ];
   };
 
-  services.flatpak.enable = true;
+  flake.nixosModules.host-shiziku-laptop =
+    { pkgs, ... }:
+    {
+      imports = [
+        self.nixosModules.systemd-boot
+        self.nixosModules.power-profile
+        self.nixosModules.sound-service
+        self.nixosModules.bluetooth
 
-  networking.hostName = "shiziku-laptop"; # Define your hostname.
+        self.nixosModules.user-shiziku
+      ];
 
-  # This option defines the first version of NixOS you have installed on this particular machine,
-  # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
-  #
-  # Most users should NEVER change this value after the initial install, for any reason,
-  # even if you've upgraded your system to a new NixOS release.
-  #
-  # This value does NOT affect the Nixpkgs version your packages and OS are pulled from,
-  # so changing it will NOT upgrade your system - see https://nixos.org/manual/nixos/stable/#sec-upgrading for how
-  # to actually do that.
-  #
-  # This value being lower than the current NixOS release does NOT mean your system is
-  # out of date, out of support, or vulnerable.
-  #
-  # Do NOT change this value unless you have manually inspected all the changes it would make to your configuration,
-  # and migrated your data accordingly.
-  #
-  # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
-  system.stateVersion = "25.11"; # Did you read the comment?
+      networking = {
+        hostName = "shiziku-laptop";
+        networkmanager.enable = true;
+      };
+
+      time.timeZone = "Asia/Taipei";
+
+      i18n.defaultLocale = "en_US.UTF-8";
+
+      hardware.cpu.intel.npu.enable = true;
+      hardware.graphics.enable = true;
+
+      xdg.portal.enable = true;
+      xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+      xdg.portal.config.common.default = "*";
+      services = {
+        openssh.enable = true;
+        flatpak.enable = true;
+      };
+      programs.appimage.enable = true;
+
+      environment.systemPackages = with pkgs; [
+        glib
+        vim
+        curl
+        wget
+
+        ripgrep
+        eza
+        sedutil
+
+        file
+        which
+        tree
+        findutils
+        coreutils
+
+        htop
+
+        icu
+      ];
+
+      # This option defines the first version of NixOS you have installed on this particular machine,
+      # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
+      #
+      # Most users should NEVER change this value after the initial install, for any reason,
+      # even if you've upgraded your system to a new NixOS release.
+      #
+      # This value does NOT affect the Nixpkgs version your packages and OS are pulled from,
+      # so changing it will NOT upgrade your system - see https://nixos.org/manual/nixos/stable/#sec-upgrading for how
+      # to actually do that.
+      #
+      # This value being lower than the current NixOS release does NOT mean your system is
+      # out of date, out of support, or vulnerable.
+      #
+      # Do NOT change this value unless you have manually inspected all the changes it would make to your configuration,
+      # and migrated your data accordingly.
+      #
+      # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
+      system.stateVersion = "25.11"; # Did you read the comment? NO, I can't read !!!
+    };
 
 }
