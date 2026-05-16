@@ -1,9 +1,6 @@
 { self, ... }:
 
 {
-  imports = [
-    ./home-manager.nix
-  ];
   flake.nixosModules.user-shiziku =
     { pkgs, ... }:
     {
