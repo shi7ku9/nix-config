@@ -12,6 +12,8 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
 
     import-tree.url = "github:denful/import-tree";
+
+    nix-gaming.url = "github:fufexan/nix-gaming";
   };
 
   outputs =

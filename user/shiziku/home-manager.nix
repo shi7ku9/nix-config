@@ -29,6 +29,7 @@
       home.packages = with pkgs; [
         # system monitor
         fastfetch
+        microfetch
         btop
 
         # archive
