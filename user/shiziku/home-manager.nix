@@ -65,6 +65,10 @@
         # dev blah blah blah
         git
 
+        #tool
+        krita
+        blender
+
         vscodium
         nixd
         nil
