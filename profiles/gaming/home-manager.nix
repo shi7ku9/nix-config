@@ -19,6 +19,7 @@
         winetricks
 
         # idk
+        easyeffects
       ];
     };
 }
