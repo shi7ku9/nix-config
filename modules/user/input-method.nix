@@ -13,6 +13,7 @@
           fcitx5-rime
           fcitx5-gtk
           fcitx5-nord
+          fcitx5-anthy
         ];
       };
     };

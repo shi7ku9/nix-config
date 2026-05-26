@@ -9,7 +9,7 @@
         pulse.enable = true;
       };
 
-      environment.systemPackages = with pkgs;[
+      environment.systemPackages = with pkgs; [
         pulseaudio
       ];
     };

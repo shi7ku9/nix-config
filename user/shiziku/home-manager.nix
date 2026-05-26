@@ -1,17 +1,20 @@
-{ inputs, self, ... }:
+{ inputs, self, withSystem, ... }:
 
 {
-  flake.homeConfigurations.shiziku = inputs.home-manager.lib.homeManagerConfiguration {
-    pkgs = inputs.nixpkgs.legacyPackages."x86_64-linux";
-    modules = [
-      self.homeModules.allow-unfree
-      self.homeModules.user-shiziku
-    ];
-    extraSpecialArgs = { inherit inputs; };
-  };
+  flake.homeConfigurations.shiziku = withSystem "x86_64-linux" (
+    ctx:
+    inputs.home-manager.lib.homeManagerConfiguration {
+      pkgs = ctx.pkgs;
+      
+      extraSpecialArgs = { inherit inputs; pkgs-stable = ctx.pkgs-stable;};
+      modules = [
+        self.homeModules.user-shiziku
+      ];
+    }
+  );
 
   flake.homeModules.user-shiziku =
-    { pkgs, ... }:
+    { pkgs, pkgs-stable, ... }:
     {
       home.username = "shiziku";
       home.homeDirectory = "/home/shiziku";
@@ -20,60 +23,64 @@
         self.homeModules.user-shiziku-default-applications
         self.homeModules.desktop-dms
         self.homeModules.profiles-gaming
+        self.homeModules.profiles-development
 
         self.homeModules.zsh
         self.homeModules.input-method
         self.homeModules.icon-fonts
       ];
 
-      home.packages = with pkgs; [
-        # system monitor
-        fastfetch
-        microfetch
-        btop
+      home.packages = (
+        with pkgs;
+        [
+          # system monitor
+          fastfetch
+          microfetch
+          btop
 
-        # archive
-        zip
-        unzip
-        p7zip
-        zstd
-        gzip
-        bzip2
-        xz
+          # archive
+          zip
+          unzip
+          p7zip
+          zstd
+          gzip
+          bzip2
+          xz
 
-        # network
-        curl
-        wget
-        netcat
-        traceroute
+          # network
+          curl
+          wget
+          netcat
+          traceroute
 
-        # utils
-        ripgrep
-        eza
-        sedutil
-        skim
-        util-linux
-        less
+          # utils
+          ripgrep
+          eza
+          sedutil
+          skim
+          util-linux
+          less
 
-        kitty
-        firefox
-        upower
+          kitty
+          firefox
+          upower
 
-        # social blah blah blah
-        vesktop
+          # social blah blah blah
+          vesktop
 
-        # dev blah blah blah
-        git
+          # dev blah blah blah
+          git
 
-        #tool
+          #tool
+          vscodium
+          nixd
+          nil
+          nixfmt
+        ]
+      ) ++ (with pkgs-stable; [
         krita
         blender
-
-        vscodium
-        nixd
-        nil
-        nixfmt
-      ];
+      ]);
 
       programs.git = {
         enable = true;

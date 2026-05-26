@@ -1,17 +1,30 @@
-{ inputs, self, ... }:
+{
+  inputs,
+  self,
+  withSystem,
+  ...
+}:
 
 {
-  flake.nixosConfigurations.shiziku-laptop = inputs.nixpkgs.lib.nixosSystem {
-    modules = [
-      self.nixosModules.accept-features
-      self.nixosModules.allow-unfree
-      self.nixosModules.host-shiziku-laptop
-    ];
-  };
+  flake.nixosConfigurations.shiziku-laptop = withSystem "x86_64-linux" (
+    ctx:
+    inputs.nixpkgs.lib.nixosSystem {
+      modules = [
+        inputs.nixpkgs.nixosModules.readOnlyPkgs
+        ({ ...} : {
+          nixpkgs.pkgs = ctx.pkgs;
+        })
+        self.nixosModules.accept-features
+        # self.nixosModules.nixpkgs
+        self.nixosModules.host-shiziku-laptop
+      ];
+    }
+  );
 
   flake.nixosModules.host-shiziku-laptop =
     { pkgs, ... }:
     {
+
       imports = [
         self.nixosModules.systemd-boot
         self.nixosModules.power-profile
@@ -20,6 +33,15 @@
 
         self.nixosModules.user-shiziku
       ];
+
+      nix.settings = {
+        trusted-users = [
+          "root"
+          "@wheel"
+        ]; # I Trust YOU!
+
+        fallback = false;
+      };
 
       networking = {
         hostName = "shiziku-laptop";
@@ -41,6 +63,7 @@
         flatpak.enable = true;
       };
       programs.appimage.enable = true;
+      security.polkit.enable = true;
 
       environment.systemPackages = with pkgs; [
         glib

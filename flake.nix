@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -14,6 +15,11 @@
     import-tree.url = "github:denful/import-tree";
 
     nix-gaming.url = "github:fufexan/nix-gaming";
+
+    nixvim = {
+      url = "github:nix-community/nixvim";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -37,20 +43,25 @@
               "flakes"
             ];
           };
-          allow-unfree = {
-            nixpkgs.config.allowUnfree = true;
-          };
         };
-        homeModules = {
-          allow-unfree = {
-            nixpkgs.config.allowUnfree = true;
-          };
-        };
+
       };
 
       perSystem =
-        { pkgs, ... }:
+        { pkgs, system, ... }:
         {
+          _module.args = {
+            pkgs = import inputs.nixpkgs {
+              inherit system;
+              config.allowUnfree = true;
+            };
+
+            pkgs-stable = import inputs.nixpkgs-stable {
+              inherit system;
+              config.allowUnfree = true;
+            };
+          };
+
           checks = {
             nixos-test = self.nixosConfigurations.shiziku-laptop.config.system.build.toplevel;
 
