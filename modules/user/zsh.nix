@@ -16,7 +16,7 @@
         syntaxHighlighting.enable = true;
 
         shellAliases = {
-          ll = "exa -l";
+          ll = "exa --icons auto -l";
         };
         history.size = 1000;
 
@@ -40,6 +40,10 @@
             src = pkgs.zsh-fzf-tab;
           }
         ];
+
+        initContent = ''
+          bindkey  "\e[57376u" end-of-line
+        '';
       };
     };
 }

@@ -1,7 +1,7 @@
 { inputs, ... }:
 
 {
-  flake.nixosModules.profiles-gaming-steam =
+  flake.nixosModules.profiles-gaming =
     { pkgs, ... }:
     {
       imports = [

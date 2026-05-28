@@ -1,12 +1,20 @@
-{ inputs, self, withSystem, ... }:
+{
+  inputs,
+  self,
+  withSystem,
+  ...
+}:
 
 {
   flake.homeConfigurations.shiziku = withSystem "x86_64-linux" (
     ctx:
     inputs.home-manager.lib.homeManagerConfiguration {
       pkgs = ctx.pkgs;
-      
-      extraSpecialArgs = { inherit inputs; pkgs-stable = ctx.pkgs-stable;};
+
+      extraSpecialArgs = {
+        inherit inputs;
+        pkgs-stable = ctx.pkgs-stable;
+      };
       modules = [
         self.homeModules.user-shiziku
       ];
@@ -20,7 +28,6 @@
       home.homeDirectory = "/home/shiziku";
 
       imports = [
-        self.homeModules.user-shiziku-default-applications
         self.homeModules.desktop-dms
         self.homeModules.profiles-gaming
         self.homeModules.profiles-development
@@ -30,9 +37,8 @@
         self.homeModules.icon-fonts
       ];
 
-      home.packages = (
-        with pkgs;
-        [
+      home.packages =
+        (with pkgs; [
           # system monitor
           fastfetch
           microfetch
@@ -76,11 +82,11 @@
           nixd
           nil
           nixfmt
-        ]
-      ) ++ (with pkgs-stable; [
-        krita
-        blender
-      ]);
+        ])
+        ++ (with pkgs-stable; [
+          krita
+          blender
+        ]);
 
       programs.git = {
         enable = true;

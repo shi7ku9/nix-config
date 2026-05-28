@@ -30,6 +30,7 @@
 
         # idk
         easyeffects # denoise
+        bubblewrap
       ];
     };
 }

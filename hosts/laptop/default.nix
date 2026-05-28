@@ -11,9 +11,12 @@
     inputs.nixpkgs.lib.nixosSystem {
       modules = [
         inputs.nixpkgs.nixosModules.readOnlyPkgs
-        ({ ...} : {
-          nixpkgs.pkgs = ctx.pkgs;
-        })
+        (
+          { ... }:
+          {
+            nixpkgs.pkgs = ctx.pkgs;
+          }
+        )
         self.nixosModules.accept-features
         # self.nixosModules.nixpkgs
         self.nixosModules.host-shiziku-laptop
@@ -30,6 +33,7 @@
         self.nixosModules.power-profile
         self.nixosModules.sound-service
         self.nixosModules.bluetooth
+        self.nixosModules.keyd
 
         self.nixosModules.user-shiziku
       ];

@@ -11,10 +11,17 @@
       programs.nixvim = {
         enable = true;
         nixpkgs.source = inputs.nixpkgs;
-
-        colorschemes.catppuccin.enable = true;
-        puglins = {
-          lualie.enable = true;
+        opts = {
+          tabstop = 2;
+          shiftwidth = 2;
+          expandtab = true;
+          smartindent = true;
+          number = true;
+          relativenumber = true;
+        };
+        colorschemes.catppuccin = {
+          enable = true;
+          settings.flavour = "frappe";
         };
       };
 

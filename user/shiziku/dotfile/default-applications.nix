@@ -1,7 +1,7 @@
 { ... }:
 
 {
-  flake.homeModules.user-shiziku-default-applications =
+  flake.homeModules.user-shiziku =
     { ... }:
     {
       xdg = {
