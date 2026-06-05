@@ -12,23 +12,7 @@
           noice.enable = true;
           web-devicons.enable = true;
           nvim-tree.enable = true;
-          telescope = {
-            enable = true;
-            keymaps = {
-              "<leader>fg" = {
-                action = "live_grep";
-                options.desc = "Live Grep";
-              };
-              "<leader>ff" = {
-                action = "find_files";
-                options.desc = "Find Files";
-              };
-              "<leader>fb" = {
-                action = "buffers";
-                options.desc = "Buffers";
-              };
-            };
-          };
+          telescope.enable = true;
         };
 
       };
