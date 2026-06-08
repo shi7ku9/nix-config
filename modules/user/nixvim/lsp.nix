@@ -28,9 +28,8 @@
                 if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
                   return
                 end
-
-                return { timeout_ms = 200, lsp_fallback = true }, on_format
-               end
+                return { timeout_ms = 200, lsp_fallback = true }
+              end
             '';
           };
           treesitter = {
@@ -49,7 +48,6 @@
               cpp
               c
               go
-              nix
             ];
           };
 
@@ -63,6 +61,14 @@
             gopls.enable = true;
             zls.enable = true;
             nixd.enable = true;
+            # Additional LSP servers common in LazyVim (meson excluded)
+            rust_analyzer.enable = true;
+            pyright.enable = true;
+            ts_ls.enable = true;
+            html.enable = true;
+            cssls.enable = true;
+            jsonls.enable = true;
+            yamlls.enable = true;
           };
         };
       };

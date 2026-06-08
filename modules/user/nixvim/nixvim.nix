@@ -18,6 +18,8 @@
           smartindent = true;
           number = true;
           relativenumber = true;
+          mouse = "a";
+          clipboard = "unnamedplus";
         };
         colorschemes.catppuccin = {
           enable = true;
@@ -26,5 +28,4 @@
       };
 
     };
-
 }

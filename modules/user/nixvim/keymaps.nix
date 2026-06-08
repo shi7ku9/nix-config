@@ -9,7 +9,7 @@
         keymaps = [
           {
             action = "<Esc>";
-            key = "jj"; # jia jia jia
+            key = "jj";
             mode = [ "i" ];
           }
           {
@@ -40,7 +40,55 @@
             mode = [ "n" ];
             options.desc = "Diagnostics";
           }
-
+          # LazyVim‑style keymaps
+          {
+            action = ":w<CR>";
+            key = "<leader>w";
+            mode = [ "n" ];
+            options.desc = "Save file";
+          }
+          {
+            action = ":q<CR>";
+            key = "<leader>q";
+            mode = [ "n" ];
+            options.desc = "Quit";
+          }
+          {
+            action = ":xa<CR>";
+            key = "<leader>Q";
+            mode = [ "n" ];
+            options.desc = "Quit all";
+          }
+          {
+            action = "<C-w>h";
+            key = "<C-h>";
+            mode = [ "n" ];
+            options.desc = "Window left";
+          }
+          {
+            action = "<C-w>j";
+            key = "<C-j>";
+            mode = [ "n" ];
+            options.desc = "Window down";
+          }
+          {
+            action = "<C-w>k";
+            key = "<C-k>";
+            mode = [ "n" ];
+            options.desc = "Window up";
+          }
+          {
+            action = "<C-w>l";
+            key = "<C-l>";
+            mode = [ "n" ];
+            options.desc = "Window right";
+          }
+          {
+            action = "<C-w>=";
+            key = "<leader>=";
+            mode = [ "n" ];
+            options.desc = "Equalize windows";
+          }
         ];
         plugins = {
           which-key.enable = true;
