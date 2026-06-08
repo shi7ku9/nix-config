@@ -78,10 +78,13 @@
           git
 
           #tool
-          vscodium
+          zed-editor
           nixd
           nil
           nixfmt
+
+          # AI
+          aider-chat
         ])
         ++ (with pkgs-stable; [
           krita
@@ -106,5 +109,7 @@
       };
 
       home.stateVersion = "26.05";
+
+      home.file."greeting.txt".text = "Hey\n";
     };
 }
