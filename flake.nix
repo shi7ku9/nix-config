@@ -15,6 +15,8 @@
     import-tree.url = "github:denful/import-tree";
 
     nix-gaming.url = "github:fufexan/nix-gaming";
+
+    nvf.url = "github:notashelf/nvf";
   };
 
   outputs =

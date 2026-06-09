@@ -79,6 +79,7 @@
 
           #tool
           zed-editor
+          vscodium
           nixd
           nil
           nixfmt
