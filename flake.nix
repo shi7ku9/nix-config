@@ -15,11 +15,6 @@
     import-tree.url = "github:denful/import-tree";
 
     nix-gaming.url = "github:fufexan/nix-gaming";
-
-    nixvim = {
-      url = "github:nix-community/nixvim";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs =

@@ -5,7 +5,7 @@
     { pkgs, ... }:
     {
       imports = [
-        self.homeModules.nixvim
+        self.homeModules.neovim
       ];
       home.packages = with pkgs; [
         # zig !
