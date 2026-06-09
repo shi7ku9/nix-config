@@ -7,6 +7,34 @@
       defaultEditor = true;
       withPython3 = true;
 
+      extraPackages = with pkgs; [
+        # LSP servers
+        nil                       # Nix
+        lua-language-server
+        pyright
+        rust-analyzer
+        nodePackages.typescript-language-server  # ts_ls
+        vscode-langservers-extracted              # html, css, json
+        yaml-language-server
+        gopls
+        zls                       # Zig
+        clang-tools               # clangd
+        nixd
+
+        # Tree‑sitter grammars
+        tree-sitter-grammars.tree-sitter-bash
+        tree-sitter-grammars.tree-sitter-lua
+        tree-sitter-grammars.tree-sitter-make
+        tree-sitter-grammars.tree-sitter-markdown
+        tree-sitter-grammars.tree-sitter-nix
+        tree-sitter-grammars.tree-sitter-toml
+        tree-sitter-grammars.tree-sitter-yaml
+        tree-sitter-grammars.tree-sitter-zig
+        tree-sitter-grammars.tree-sitter-cpp
+        tree-sitter-grammars.tree-sitter-c
+        tree-sitter-grammars.tree-sitter-go
+      ];
+
       initLua = builtins.readFile ./config/init.lua;
     };
 
