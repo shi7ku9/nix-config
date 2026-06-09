@@ -12,8 +12,14 @@ return {
     require("telescope").setup({
       defaults = {
         mappings = {
-          i = { ["<f13>"] = require("telescope.actions").close },
-          n = { ["<f13>"] = require("telescope.actions").close },
+          i = {
+            ["<f13>"] = require("telescope.actions").close,
+            ["<C-c>"] = require("telescope.actions").close, -- fallback for keyboards lacking F13
+          },
+          n = {
+            ["<f13>"] = require("telescope.actions").close,
+            ["<C-c>"] = require("telescope.actions").close,
+          },
         },
       },
     })

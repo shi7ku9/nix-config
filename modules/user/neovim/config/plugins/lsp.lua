@@ -21,8 +21,13 @@ return {
       },
       handlers = {
         function(server_name)
-          local lspconfig = require("lspconfig")
-          lspconfig[server_name].setup({ capabilities = capabilities })
+          local ok, err = pcall(function()
+            local lspconfig = require("lspconfig")
+            lspconfig[server_name].setup({ capabilities = capabilities })
+          end)
+          if not ok then
+            vim.notify("LSP setup error for " .. server_name .. ": " .. tostring(err), vim.log.levels.WARN)
+          end
         end,
       },
     })
