@@ -2,7 +2,7 @@ return {
   "neovim/nvim-lspconfig",
   event = { "BufReadPre", "BufNewFile" },
   config = function()
-    local lspconfig = require("lspconfig")
+    -- local lspconfig = require("lspconfig")
     local capabilities = vim.lsp.protocol.make_client_capabilities()
     local ok, blink = pcall(require, "blink.cmp")
     if ok then
@@ -17,7 +17,7 @@ return {
 
     for _, server_name in ipairs(servers) do
       local ok, err = pcall(function()
-        lspconfig[server_name].setup({ capabilities = capabilities })
+        vim.lsp.config('*',{capabilities = capabilities} )
       end)
       if not ok then
         vim.notify("LSP setup error for " .. server_name .. ": " .. tostring(err), vim.log.levels.WARN)

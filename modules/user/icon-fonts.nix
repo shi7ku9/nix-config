@@ -7,10 +7,10 @@
       fonts.fontconfig = {
         enable = true;
         antialiasing = true;
-        defaultFonts = {
-          monospace = [ "Noto Sans Mono CJK SC" ];
-          emoji = [ "Noto Color Emoji" ];
-        };
+        # defaultFonts = {
+        #   monospace = [ "Noto Sans Mono CJK SC" ];
+        #   emoji = [ "Noto Color Emoji" ];
+        # };
       };
 
       home.packages = with pkgs; [
