@@ -2,11 +2,11 @@
 { inputs, ... }:
 
 {
-  flake.nixosModules.profiles-gaming =
+  flake.nixosModules."profiles/gaming" =
     { ... }:
     {
       imports = [
-        #self.nixosModules.profiles-gaming-steam
+        #self.nixosModules."profiles/gaming-steam"
 
         inputs.nix-gaming.nixosModules.pipewireLowLatency
       ];

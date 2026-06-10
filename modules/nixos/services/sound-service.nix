@@ -1,7 +1,7 @@
 { ... }:
 
 {
-  flake.nixosModules.sound-service =
+  flake.nixosModules."services/sound-service" =
     { pkgs, ... }:
     {
       services.pipewire = {

@@ -1,7 +1,7 @@
 { ... }:
 
 {
-  flake.nixosModules.power-profile =
+  flake.nixosModules."services/power-profile"=
     { ... }:
     {
       services.upower.enable = true;

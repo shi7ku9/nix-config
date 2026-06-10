@@ -1,7 +1,7 @@
 { ... }:
 
 {
-  flake.homeModules.profiles-gaming =
+  flake.homeModules."profiles/gaming" =
     { pkgs, pkgs-stable, ... }:
     {
       home.packages =

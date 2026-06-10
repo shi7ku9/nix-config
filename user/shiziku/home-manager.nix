@@ -16,21 +16,21 @@
         pkgs-stable = ctx.pkgs-stable;
       };
       modules = [
-        self.homeModules.user-shiziku
+        self.homeModules."user/shiziku"
       ];
     }
   );
 
-  flake.homeModules.user-shiziku =
+  flake.homeModules."user/shiziku" =
     { pkgs, pkgs-stable, ... }:
     {
       home.username = "shiziku";
       home.homeDirectory = "/home/shiziku";
 
       imports = [
-        self.homeModules.desktop-dms
-        self.homeModules.profiles-gaming
-        self.homeModules.profiles-development
+        self.homeModules."desktop/dms"
+        self.homeModules."profiles/gaming"
+        self.homeModules."profiles/development"
 
         self.homeModules.zsh
         self.homeModules.input-method

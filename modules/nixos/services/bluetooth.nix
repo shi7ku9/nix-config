@@ -1,7 +1,7 @@
 { ... }:
 
 {
-  flake.nixosModules.bluetooth =
+  flake.nixosModules."services/bluetooth" =
     { ... }:
     {
       hardware.bluetooth.enable = true;

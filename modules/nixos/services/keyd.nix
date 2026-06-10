@@ -1,6 +1,6 @@
 { ... }:
 {
-  flake.nixosModules.keyd =
+  flake.nixosModules."services/keyd" =
     { ... }:
     {
       services.keyd = {

@@ -1,7 +1,7 @@
 { ... }:
 
 {
-  flake.nixosModules.host-shiziku-laptop =
+  flake.nixosModules."host/shiziku-laptop" =
     {
       config,
       lib,

@@ -1,7 +1,7 @@
 { self, ... }:
 
 {
-  flake.homeModules.profiles-development =
+  flake.homeModules."profiles/development" =
     { pkgs, ... }:
     {
       imports = [

@@ -19,23 +19,23 @@
         )
         self.nixosModules.accept-features
         # self.nixosModules.nixpkgs
-        self.nixosModules.host-shiziku-laptop
+        self.nixosModules."host/shiziku-laptop"
       ];
     }
   );
 
-  flake.nixosModules.host-shiziku-laptop =
+  flake.nixosModules."host/shiziku-laptop" =
     { pkgs, ... }:
     {
 
       imports = [
-        self.nixosModules.systemd-boot
-        self.nixosModules.power-profile
-        self.nixosModules.sound-service
-        self.nixosModules.bluetooth
-        self.nixosModules.keyd
+        self.nixosModules."system/systemd-boot"
+        self.nixosModules."services/power-profile"
+        self.nixosModules."services/sound-service"
+        self.nixosModules."services/bluetooth"
+        self.nixosModules."services/keyd"
 
-        self.nixosModules.user-shiziku
+        self.nixosModules."user/shiziku"
       ];
 
       nix.settings = {

@@ -1,6 +1,6 @@
 { ... }:
 {
-  flake.nixosModules.desktop-dms =
+  flake.nixosModules."desktop/dms" =
     { pkgs, ... }:
     {
 

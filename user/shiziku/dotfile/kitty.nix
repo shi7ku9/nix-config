@@ -1,7 +1,7 @@
 { ... }:
 
 {
-  flake.homeModules.user-shiziku =
+  flake.homeModules."user/shiziku" =
     { ... }:
     {
       xdg.configFile."kitty/" = {
