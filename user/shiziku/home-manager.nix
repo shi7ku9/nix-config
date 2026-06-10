@@ -78,6 +78,7 @@
           git
 
           #tool
+          wl-clipboard
           zed-editor
           vscodium
           nixd

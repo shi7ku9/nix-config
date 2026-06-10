@@ -5,7 +5,7 @@
     { pkgs, ... }:
     {
       imports = [
-        self.homeModules.neovim
+        self.homeModules.nvf
       ];
       home.packages = with pkgs; [
         # zig !
