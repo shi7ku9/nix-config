@@ -1,5 +1,5 @@
 # gaming profile
-{ inputs, ... }:
+{ ... }:
 
 {
   flake.nixosModules."profiles/gaming" =
@@ -7,8 +7,6 @@
     {
       imports = [
         #self.nixosModules."profiles/gaming-steam"
-
-        inputs.nix-gaming.nixosModules.pipewireLowLatency
       ];
       programs.gamemode.enable = true;
 
@@ -20,13 +18,8 @@
         alsa.support32Bit = true;
         pulse.enable = true;
 
-        lowLatency = {
-          enable = true;
-          quantum = 64;
-          rate = 48000;
-        };
       };
 
-      security.rtkit.enable = true;
+      security.rtkit.enable = false;
     };
 }

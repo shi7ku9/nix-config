@@ -1,12 +1,9 @@
-{ inputs, ... }:
+{ ... }:
 
 {
   flake.nixosModules."profiles/gaming" =
     { pkgs, ... }:
     {
-      imports = [
-        inputs.nix-gaming.nixosModules.platformOptimizations
-      ];
       programs.steam = {
         enable = true;
         remotePlay.openFirewall = true;
@@ -14,9 +11,6 @@
         extraCompatPackages = with pkgs; [
           proton-ge-bin
         ];
-
-        # nix-gaming
-        platformOptimizations.enable = true;
       };
 
       programs.gamescope = {
