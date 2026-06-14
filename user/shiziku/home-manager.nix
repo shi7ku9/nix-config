@@ -87,6 +87,7 @@
 
           # AI
           aider-chat
+          skills
         ])
         ++ (with pkgs-stable; [
           krita

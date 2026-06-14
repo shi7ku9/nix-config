@@ -42,6 +42,7 @@
         ];
 
         initContent = ''
+          bindkey -e
           bindkey  "\e[57376u" end-of-line
         '';
       };

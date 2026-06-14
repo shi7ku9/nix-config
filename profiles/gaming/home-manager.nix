@@ -4,27 +4,25 @@
   flake.homeModules."profiles/gaming" =
     { pkgs, pkgs-stable, ... }:
     {
-      home.packages =
-        (with pkgs; [
-          # minecraft !
-          prismlauncher
+      home.packages = with pkgs; [
+        # minecraft !
+        prismlauncher
 
-          # osu
-          osu-lazer-bin
+        # osu
+        osu-lazer-bin
 
-          # discord
-          vesktop
+        # discord
+        vesktop
 
-          # wine
-          wineWow64Packages.stableFull
-          winetricks
+        # wine
+        wineWow64Packages.stableFull
+        winetricks
 
-          # idk
-          easyeffects # denoise
-          bubblewrap
-        ])
-        ++ (with pkgs-stable; [
-          lutris-free
-        ]);
+        lutris
+
+        # idk
+        easyeffects # denoise
+        bubblewrap
+      ];
     };
 }
