@@ -4,6 +4,6 @@
   flake.homeModules."desktop/dms" =
     { ... }:
     {
-      # consider to add something
+      xdg.configFile."hypr/hyprland.lua".source = ./hypr/hyprland.lua;
     };
 }

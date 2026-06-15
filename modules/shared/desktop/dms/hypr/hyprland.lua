@@ -1,4 +1,4 @@
--- Hyprland Lua Configuration for noctalia-shell
+-- Hyprland Lua Configuration for DMS
 -- https://wiki.hypr.land/Configuring/
 
 -- ====================
@@ -9,7 +9,7 @@ hl.on("hyprland.start", function()
   hl.exec_cmd("systemctl --user start hyprland-session.target")
   hl.exec_cmd("hyprctl setcursor Bibata-Modern-Ice 24")
   hl.exec_cmd("fcitx5 -d")
-  hl.exec_cmd("noctalia-shell")
+  hl.exec_cmd("dms run")
 end)
 
 -- ====================
@@ -94,6 +94,64 @@ hl.config({
     disable_hyprland_logo = true,
     disable_splash_rendering = true,
   },
+})
+
+-- ====================
+-- COLORS (DMS theme)
+-- ====================
+local primary  = "rgb(ca9ee6)"
+local outline  = "rgb(737994)"
+local error    = "rgb(e78284)"
+
+hl.config({
+  general = {
+    col = {
+      active_border = primary,
+      inactive_border = outline,
+    },
+  },
+
+  group = {
+    col = {
+      border_active = primary,
+      border_inactive = outline,
+      border_locked_active = error,
+      border_locked_inactive = outline,
+    },
+    groupbar = {
+      col = {
+        active = primary,
+        inactive = outline,
+        locked_active = error,
+        locked_inactive = outline,
+      },
+    },
+  },
+})
+
+-- ====================
+-- LAYOUT (DMS overrides)
+-- ====================
+hl.config({
+  general = {
+    gaps_in = 4,
+    gaps_out = 4,
+    border_size = 2,
+  },
+
+  decoration = {
+    rounding = 12,
+  },
+})
+
+-- ====================
+-- OUTPUTS (DMS monitor override)
+-- ====================
+hl.monitor({
+  output = "",
+  mode = "1920x1200@180",
+  position = "0x0",
+  scale = "1",
 })
 
 -- ====================
@@ -187,48 +245,49 @@ hl.window_rule({
 -- ====================
 -- KEYBINDS
 -- ====================
-local ipc = "noctalia-shell ipc call "
+local ipc = "dms ipc call "
 local M = "SUPER"
 
--- Helper: noct_exec runs a noctalia IPC command
-local ipc = "noctalia-shell ipc call "
+-- Helper: exec_dms runs a dms IPC command
+local ipc = "dms ipc call "
 
 -- [[ Application Launchers ]]
 hl.bind(M .. "+" .. "T",      hl.dsp.exec_cmd("kitty"))
 hl.bind(M .. "+" .. "E",      hl.dsp.exec_cmd("dolphin"))
 hl.bind(M .. "+" .. "RETURN", hl.dsp.exec_cmd("kitty"))
-hl.bind(M .. "+" .. "SPACE",  hl.dsp.exec_cmd("noctalia-shell ipc call launcher toggle"))
-hl.bind(M .. "+" .. "V",      hl.dsp.exec_cmd("noctalia-shell ipc call launcher clipboard"))
-hl.bind(M .. "+" .. "M",      hl.dsp.exec_cmd("noctalia-shell ipc call sessionMenu toggle"))
-hl.bind(M .. "+" .. "COMMA",  hl.dsp.exec_cmd("noctalia-shell ipc call settings toggle"))
-hl.bind(M .. "+" .. "N",      hl.dsp.exec_cmd("noctalia-shell ipc call notifications toggleHistory"))
-hl.bind(M .. "+" .. "Y",      hl.dsp.exec_cmd("noctalia-shell ipc call wallpaper toggle"))
-hl.bind(M .. "+" .. "TAB",    hl.dsp.exec_cmd("noctalia-shell ipc call launcher windows"))
-hl.bind(M .. "+" .. "X",      hl.dsp.exec_cmd("noctalia-shell ipc call sessionMenu toggle"))
+hl.bind(M .. "+" .. "SPACE",  hl.dsp.exec_cmd("dms ipc call spotlight toggle"))
+hl.bind(M .. "+" .. "V",      hl.dsp.exec_cmd("dms ipc call clipboard toggle"))
+hl.bind(M .. "+" .. "M",      hl.dsp.exec_cmd("dms ipc call processlist focusOrToggle"))
+hl.bind(M .. "+" .. "COMMA",  hl.dsp.exec_cmd("dms ipc call settings focusOrToggle"))
+hl.bind(M .. "+" .. "N",      hl.dsp.exec_cmd("dms ipc call notifications toggle"))
+hl.bind(M .. "+SHIFT" .. "+" .. "N",     hl.dsp.exec_cmd("dms ipc call notepad toggle"))
+hl.bind(M .. "+" .. "Y",      hl.dsp.exec_cmd("dms ipc call dankdash wallpaper"))
+hl.bind(M .. "+" .. "TAB",    hl.dsp.exec_cmd("dms ipc call hypr toggleOverview"))
+hl.bind(M .. "+" .. "X",      hl.dsp.exec_cmd("dms ipc call powermenu toggle"))
 
 -- [[ Cheat sheet ]]
-hl.bind(M .. "+SHIFT" .. "+" .. "Slash", hl.dsp.exec_cmd("noctalia-shell ipc call plugin:keybind-cheatsheet toggle"))
+hl.bind(M .. "+SHIFT" .. "+" .. "Slash", hl.dsp.exec_cmd("dms ipc call keybinds toggle hyprland"))
 
--- [[ Security & Session ]]
-hl.bind(M .. "+ALT" .. "+" .. "L",      hl.dsp.exec_cmd("noctalia-shell ipc call lockScreen lock"))
+-- [[ Security ]]
+hl.bind(M .. "+ALT" .. "+" .. "L",      hl.dsp.exec_cmd("dms ipc call lock lock"))
 hl.bind(M .. "+SHIFT" .. "+" .. "E",      hl.dsp.exit())
-hl.bind("CTRL+ALT" .. "+" .. "Delete", hl.dsp.exec_cmd("loginctl lock-session"))
+hl.bind("CTRL+ALT" .. "+" .. "Delete", hl.dsp.exec_cmd("dms ipc call processlist focusOrToggle"))
 
 -- [[ Audio Controls ]]
-hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("noctalia-shell ipc call volume increase"))
-hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("noctalia-shell ipc call volume decrease"))
-hl.bind("XF86AudioMute",        hl.dsp.exec_cmd("noctalia-shell ipc call volume muteOutput"))
-hl.bind("XF86AudioMicMute",     hl.dsp.exec_cmd("amixer set Capture toggle"))
-hl.bind("XF86AudioPause",       hl.dsp.exec_cmd("playerctl play-pause"))
-hl.bind("XF86AudioPlay",        hl.dsp.exec_cmd("playerctl play-pause"))
-hl.bind("XF86AudioPrev",        hl.dsp.exec_cmd("playerctl previous"))
-hl.bind("XF86AudioNext",        hl.dsp.exec_cmd("playerctl next"))
-hl.bind("CTRL" .. "+" .. "XF86AudioRaiseVolume", hl.dsp.exec_cmd("playerctl volume 0.05+"))
-hl.bind("CTRL" .. "+" .. "XF86AudioLowerVolume", hl.dsp.exec_cmd("playerctl volume 0.05-"))
+hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("dms ipc call audio increment 3"))
+hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("dms ipc call audio decrement 3"))
+hl.bind("XF86AudioMute",        hl.dsp.exec_cmd("dms ipc call audio mute"))
+hl.bind("XF86AudioMicMute",     hl.dsp.exec_cmd("dms ipc call audio micmute"))
+hl.bind("XF86AudioPause",       hl.dsp.exec_cmd("dms ipc call mpris playPause"))
+hl.bind("XF86AudioPlay",        hl.dsp.exec_cmd("dms ipc call mpris playPause"))
+hl.bind("XF86AudioPrev",        hl.dsp.exec_cmd("dms ipc call mpris previous"))
+hl.bind("XF86AudioNext",        hl.dsp.exec_cmd("dms ipc call mpris next"))
+hl.bind("CTRL" .. "+" .. "XF86AudioRaiseVolume", hl.dsp.exec_cmd("dms ipc call mpris increment 3"))
+hl.bind("CTRL" .. "+" .. "XF86AudioLowerVolume", hl.dsp.exec_cmd("dms ipc call mpris decrement 3"))
 
 -- [[ Brightness Controls ]]
-hl.bind("XF86MonBrightnessUp",   hl.dsp.exec_cmd("noctalia-shell ipc call brightness increase"))
-hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("noctalia-shell ipc call brightness decrease"))
+hl.bind("XF86MonBrightnessUp",   hl.dsp.exec_cmd("dms ipc call brightness increment 5"))
+hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("dms ipc call brightness decrement 5"))
 
 -- [[ Window Management ]]
 hl.bind(M .. "+" .. "Q", hl.dsp.window.close())
@@ -236,6 +295,7 @@ hl.bind(M .. "+" .. "F", hl.dsp.window.fullscreen({ mode = "fullscreen"}))
 hl.bind(M .. "+SHIFT" .. "+" .. "F", hl.dsp.window.fullscreen({ mode = "fullscreen", action = "unset"}))
 hl.bind(M .. "+SHIFT" .. "+" .. "T", hl.dsp.window.float())
 hl.bind(M .. "+" .. "W", hl.dsp.group.toggle())
+hl.bind(M .. "+SHIFT" .. "+" .. "W", hl.dsp.exec_cmd("dms ipc call window-rules toggle"))
 
 -- [[ Focus Navigation — arrows + hjkl ]]
 hl.bind(M .. "+" .. "LEFT",  hl.dsp.focus({ direction = "l"}))
@@ -289,6 +349,9 @@ hl.bind(M .. "+CTRL" .. "+" .. "UP",        hl.dsp.window.move({ workspace = "e-
 hl.bind(M .. "+CTRL" .. "+" .. "U",         hl.dsp.window.move({ workspace = "e+1"}))
 hl.bind(M .. "+CTRL" .. "+" .. "I",         hl.dsp.window.move({ workspace = "e-1"}))
 
+-- [[ Workspace rename ]]
+hl.bind("CTRL+SHIFT" .. "+" .. "R", hl.dsp.exec_cmd("dms ipc call workspace-rename open"))
+
 -- [[ Move to Workspace ]]
 hl.bind(M .. "+SHIFT" .. "+" .. "PAGE_DOWN", hl.dsp.window.move({ workspace = "e+1"}))
 hl.bind(M .. "+SHIFT" .. "+" .. "PAGE_UP",   hl.dsp.window.move({ workspace = "e-1"}))
@@ -322,8 +385,9 @@ hl.bind(M .. "+SHIFT" .. "+" .. "MINUS",  hl.dsp.exec_cmd("hyprctl dispatch resi
 hl.bind(M .. "+SHIFT" .. "+" .. "EQUAL",  hl.dsp.exec_cmd("hyprctl dispatch resizeactive 0 10%"))
 
 -- [[ Screenshots ]]
-hl.bind("Print", function() exec("grim -g \"$(slurp)\" - | wl-copy") end)
-hl.bind("CTRL" .. "+" .. "Print", hl.dsp.exec_cmd("grim - | wl-copy"))
+hl.bind("Print", hl.dsp.exec_cmd("dms screenshot"))
+hl.bind("CTRL" .. "+" .. "Print", hl.dsp.exec_cmd("dms screenshot full"))
+hl.bind("ALT" .. "+" .. "Print", hl.dsp.exec_cmd("dms screenshot window"))
 
 -- [[ DPMS ]]
 hl.bind(M .. "+SHIFT" .. "+" .. "P", hl.dsp.dpms())
