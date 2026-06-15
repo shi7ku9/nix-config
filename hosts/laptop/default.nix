@@ -50,6 +50,7 @@
       networking = {
         hostName = "shiziku-laptop";
         networkmanager.enable = true;
+        firewall.trustedInterfaces = [ "wlp1s0" ];
       };
 
       time.timeZone = "Asia/Taipei";
