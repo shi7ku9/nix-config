@@ -297,6 +297,10 @@ hl.bind(M .. "+SHIFT" .. "+" .. "T", hl.dsp.window.float())
 hl.bind(M .. "+" .. "W", hl.dsp.group.toggle())
 hl.bind(M .. "+SHIFT" .. "+" .. "W", hl.dsp.exec_cmd("dms ipc call window-rules toggle"))
 
+-- [[ Mouse Move/Resize ]]
+hl.bind(M .. " + mouse:272", hl.dsp.window.drag(),   { mouse = true })
+hl.bind(M .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
+
 -- [[ Focus Navigation — arrows + hjkl ]]
 hl.bind(M .. "+" .. "LEFT",  hl.dsp.focus({ direction = "l"}))
 hl.bind(M .. "+" .. "DOWN",  hl.dsp.focus({ direction = "d"}))
