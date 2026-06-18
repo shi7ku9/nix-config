@@ -112,7 +112,5 @@
       };
 
       home.stateVersion = "26.05";
-
-      home.file."greeting.txt".text = "Hey\n";
     };
 }

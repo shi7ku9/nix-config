@@ -22,6 +22,8 @@
         clang
         clang-tools
 
+        nodejs
+        python3
       ];
     };
 }
