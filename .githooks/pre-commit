@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+echo ":: Running nix fmt..."
+nix fmt . 2>&1 || {
+  echo "ERROR: nix fmt failed. Fix before committing."
+  exit 1
+}
+
+echo ":: nix fmt passed."
+
 echo ":: Running nix flake check (syntax only)..."
 nix flake check --no-build 2>&1 || {
   echo "ERROR: nix flake check failed. Fix before committing."
