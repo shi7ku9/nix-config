@@ -76,10 +76,6 @@
         curl
         wget
 
-        ripgrep
-        eza
-        sedutil
-
         file
         which
         tree

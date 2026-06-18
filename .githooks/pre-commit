@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo ":: Running nix flake check (syntax only)..."
+nix flake check --no-build 2>&1 || {
+  echo "ERROR: nix flake check failed. Fix before committing."
+  exit 1
+}
+
+echo ":: nix flake check passed."

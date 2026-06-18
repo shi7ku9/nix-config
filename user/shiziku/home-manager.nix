@@ -54,8 +54,6 @@
           xz
 
           # network
-          curl
-          wget
           netcat
           traceroute
 
