@@ -9,7 +9,6 @@
       powerManagement.enable = true;
       powerManagement.powertop.enable = true;
 
-      # Simple static governor – no external package required
       powerManagement.cpuFreqGovernor = "powersave";
 
     };

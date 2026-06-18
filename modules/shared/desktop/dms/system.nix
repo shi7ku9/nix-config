@@ -22,16 +22,3 @@
       ];
     };
 }
-# programs.hyprland.enable = true;
-#   programs.dms-shell = {
-#     enable = true;
-
-#     systemd = {
-#       enable = true;
-#     };
-
-#     enableAudioWavelength = true;
-#     enableSystemMonitoring = true;
-
-#     quickshell.package = pkgs.quickshell;
-#   };
