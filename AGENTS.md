@@ -23,6 +23,8 @@ flake.nix (flake-parts entry)
 ```
 `import-tree` maps the filesystem path to the module key. No manual `imports` needed.
 
+> **⚠ `git add` before use**: Nix flake evaluation only sees git-tracked files. Newly created `.nix` files won't be visible until staged (`git add <file>` first).
+
 **Same-key merging**: Multiple files can export the same key — import-tree merges them. Used by `hosts/laptop/default.nix` + `hosts/laptop/hardware.nix` (both export `"host/shiziku-laptop"`) and `user/shiziku/` dotfiles (all export `"user/shiziku"`).
 
 **Dual-module pattern**: Concerns that span both NixOS and home-manager (desktops, profiles) split into paired files:
