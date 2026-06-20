@@ -34,6 +34,7 @@
         self.nixosModules."services/sound-service"
         self.nixosModules."services/bluetooth"
         self.nixosModules."services/keyd"
+        self.nixosModules."services/docker"
 
         self.nixosModules."user/shiziku"
       ];
