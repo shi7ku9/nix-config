@@ -22,7 +22,12 @@
   );
 
   flake.homeModules."user/shiziku" =
-    { pkgs, pkgs-stable, ... }:
+    {
+      pkgs,
+      pkgs-stable,
+      inputs,
+      ...
+    }:
     {
       home.username = "shiziku";
       home.homeDirectory = "/home/shiziku";
@@ -66,7 +71,7 @@
           less
 
           kitty
-          firefox
+          inputs.zen-browser.packages.x86_64-linux.default
           upower
 
           # social blah blah blah
