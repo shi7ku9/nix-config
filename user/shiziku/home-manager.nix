@@ -33,7 +33,7 @@
       home.homeDirectory = "/home/shiziku";
 
       imports = [
-        self.homeModules."desktop/dms"
+        self.homeModules."desktop/noctalia-shell"
         self.homeModules."profiles/gaming"
         self.homeModules."profiles/development"
 

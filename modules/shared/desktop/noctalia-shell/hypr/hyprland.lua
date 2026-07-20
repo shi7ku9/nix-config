@@ -1,15 +1,19 @@
--- Hyprland Lua Configuration for noctalia-shell
--- https://wiki.hypr.land/Configuring/
+-- Noctalia-Shell Hyprland Lua Configuration
+-- https://docs.noctalia.dev/v5/ipc/
+-- Keybinds mirror DMS layout; IPC targets mapped to noctalia msg
 
 -- ====================
 -- AUTOSTART
 -- ====================
+
+require("outputs")
+
 hl.on("hyprland.start", function()
   hl.exec_cmd("dbus-update-activation-environment --systemd --all")
   hl.exec_cmd("systemctl --user start hyprland-session.target")
   hl.exec_cmd("hyprctl setcursor Bibata-Modern-Ice 24")
   hl.exec_cmd("fcitx5 -d")
-  hl.exec_cmd("noctalia-shell")
+  hl.exec_cmd("noctalia")
 end)
 
 -- ====================
@@ -97,8 +101,87 @@ hl.config({
 })
 
 -- ====================
+-- COLORS (DMS theme)
+-- ====================
+local primary = "rgb(ca9ee6)"
+local outline = "rgb(737994)"
+local error   = "rgb(e78284)"
+
+hl.config({
+  general = {
+    col = {
+      active_border = primary,
+      inactive_border = outline,
+    },
+  },
+
+  group = {
+    col = {
+      border_active = primary,
+      border_inactive = outline,
+      border_locked_active = error,
+      border_locked_inactive = outline,
+    },
+    groupbar = {
+      col = {
+        active = primary,
+        inactive = outline,
+        locked_active = error,
+        locked_inactive = outline,
+      },
+    },
+  },
+})
+
+-- ====================
+-- LAYOUT (DMS overrides)
+-- ====================
+hl.config({
+  general = {
+    gaps_in = 4,
+    gaps_out = 4,
+    border_size = 2,
+  },
+
+  decoration = {
+    rounding = 12,
+  },
+})
+
+-- ====================
+-- OUTPUTS (DMS monitor override)
+-- ====================
+hl.monitor({
+  output = "",
+  mode = "1920x1200@180",
+  position = "0x0",
+  scale = "1",
+})
+
+-- ====================
+-- LAYER RULES (Noctalia blur + no-anim)
+-- ====================
+hl.layer_rule({
+  name = "noctalia",
+  match = {
+    namespace = "^noctalia-(bar-.+|notification|dock|panel|attached-panel|osd|window-switcher)$",
+  },
+  no_anim = true,
+  ignore_alpha = 0.5,
+  blur = true,
+  blur_popups = true,
+})
+
+-- ====================
 -- WINDOW RULES
 -- ====================
+hl.window_rule({
+  name = "noctalia-settings",
+  match = { class = "dev.noctalia.Noctalia" },
+  float = true,
+  size = { 1080, 920 },
+})
+
 hl.window_rule({
   name = "tile-wezterm",
   match = { class = "^org\\.wezfurlong\\.wezterm$" },
@@ -187,51 +270,61 @@ hl.window_rule({
 -- ====================
 -- KEYBINDS
 -- ====================
-local ipc = "noctalia-shell ipc call "
 local M = "SUPER"
-
--- Helper: noct_exec runs a noctalia IPC command
-local ipc = "noctalia-shell ipc call "
+local ipc = "noctalia msg "
 
 -- [[ Application Launchers ]]
 hl.bind(M .. "+" .. "T", hl.dsp.exec_cmd("kitty"))
 hl.bind(M .. "+" .. "E", hl.dsp.exec_cmd("dolphin"))
 hl.bind(M .. "+" .. "RETURN", hl.dsp.exec_cmd("kitty"))
-hl.bind(M .. "+" .. "SPACE", hl.dsp.exec_cmd("noctalia-shell ipc call launcher toggle"))
-hl.bind(M .. "+" .. "V", hl.dsp.exec_cmd("noctalia-shell ipc call launcher clipboard"))
-hl.bind(M .. "+" .. "M", hl.dsp.exec_cmd("noctalia-shell ipc call sessionMenu toggle"))
-hl.bind(M .. "+" .. "COMMA", hl.dsp.exec_cmd("noctalia-shell ipc call settings toggle"))
-hl.bind(M .. "+" .. "N", hl.dsp.exec_cmd("noctalia-shell ipc call notifications toggleHistory"))
-hl.bind(M .. "+" .. "Y", hl.dsp.exec_cmd("noctalia-shell ipc call wallpaper toggle"))
-hl.bind(M .. "+" .. "TAB", hl.dsp.exec_cmd("noctalia-shell ipc call launcher windows"))
-hl.bind(M .. "+" .. "X", hl.dsp.exec_cmd("noctalia-shell ipc call sessionMenu toggle"))
+hl.bind(M .. "+" .. "SPACE", hl.dsp.exec_cmd(ipc .. "panel-toggle launcher"))
+hl.bind(M .. "+" .. "V", hl.dsp.exec_cmd(ipc .. "panel-toggle clipboard"))
+-- M + M: processlist — Noctalia has no task-manager panel; window-switcher is closest
+hl.bind(M .. "+" .. "M", hl.dsp.exec_cmd(ipc .. "window-switcher"))
+hl.bind(M .. "+" .. "COMMA", hl.dsp.exec_cmd(ipc .. "settings-toggle"))
+-- M + N: notifications panel — Noctalia has no notification-center panel; DND toggle instead
+hl.bind(M .. "+" .. "N", hl.dsp.exec_cmd(ipc .. "notification-dnd-toggle"))
+-- M + SHIFT + N: notepad — Noctalia has no notepad; unused
+-- hl.bind(M .. "+SHIFT" .. "+" .. "N", ...)
+hl.bind(M .. "+" .. "Y", hl.dsp.exec_cmd(ipc .. "panel-toggle wallpaper"))
+-- M + TAB: overview — Noctalia has no overview; window-switcher already on M+M
+-- hl.bind(M .. "+" .. "TAB", ...)
+hl.bind(M .. "+" .. "X", hl.dsp.exec_cmd(ipc .. "panel-toggle session"))
 
 -- [[ Cheat sheet ]]
-hl.bind(M .. "+SHIFT" .. "+" .. "Slash", hl.dsp.exec_cmd("noctalia-shell ipc call plugin:keybind-cheatsheet toggle"))
+-- Noctalia has no keybinds cheat-sheet; unused
+-- hl.bind(M .. "+SHIFT" .. "+" .. "Slash", ...)
 
--- [[ Security & Session ]]
-hl.bind(M .. "+ALT" .. "+" .. "L", hl.dsp.exec_cmd("noctalia-shell ipc call lockScreen lock"))
+-- [[ Security ]]
+hl.bind(M .. "+ALT" .. "+" .. "L", hl.dsp.exec_cmd(ipc .. "session lock"))
 hl.bind(M .. "+SHIFT" .. "+" .. "E", hl.dsp.exit())
-hl.bind("CTRL+ALT" .. "+" .. "Delete", hl.dsp.exec_cmd("loginctl lock-session"))
+hl.bind("CTRL+ALT" .. "+" .. "Delete", hl.dsp.exec_cmd(ipc .. "window-switcher"))
 
 -- [[ Audio Controls ]]
-hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("noctalia-shell ipc call volume increase"))
-hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("noctalia-shell ipc call volume decrease"))
-hl.bind("XF86AudioMute", hl.dsp.exec_cmd("noctalia-shell ipc call volume muteOutput"))
-hl.bind("XF86AudioMicMute", hl.dsp.exec_cmd("amixer set Capture toggle"))
-hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"))
-hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"))
-hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"))
-hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"))
-hl.bind("CTRL" .. "+" .. "XF86AudioRaiseVolume", hl.dsp.exec_cmd("playerctl volume 0.05+"))
-hl.bind("CTRL" .. "+" .. "XF86AudioLowerVolume", hl.dsp.exec_cmd("playerctl volume 0.05-"))
+hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd(ipc .. "volume-up 3"))
+hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd(ipc .. "volume-down 3"))
+hl.bind("XF86AudioMute", hl.dsp.exec_cmd(ipc .. "volume-mute"))
+hl.bind("XF86AudioMicMute", hl.dsp.exec_cmd(ipc .. "mic-mute"))
+hl.bind("XF86AudioPause", hl.dsp.exec_cmd(ipc .. "media toggle"))
+hl.bind("XF86AudioPlay", hl.dsp.exec_cmd(ipc .. "media toggle"))
+hl.bind("XF86AudioPrev", hl.dsp.exec_cmd(ipc .. "media previous"))
+hl.bind("XF86AudioNext", hl.dsp.exec_cmd(ipc .. "media next"))
+-- CTRL + media keys: per-app media volume — Noctalia has no per-app MPRIS volume control
+-- hl.bind("CTRL" .. "+" .. "XF86AudioRaiseVolume", ...)
+-- hl.bind("CTRL" .. "+" .. "XF86AudioLowerVolume", ...)
+
+-- [[ Brightness Controls ]]
+hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd(ipc .. "brightness-up"))
+hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd(ipc .. "brightness-down"))
 
 -- [[ Window Management ]]
 hl.bind(M .. "+" .. "Q", hl.dsp.window.close())
-hl.bind(M .. "+" .. "F", hl.dsp.exec_cmd("hyprctl dispatch fullscreenstate 2"))             -- 最大化 (保留 panel)
-hl.bind(M .. "+SHIFT" .. "+" .. "F", hl.dsp.exec_cmd("hyprctl dispatch fullscreenstate 1")) -- 全螢幕
+hl.bind(M .. "+" .. "F", hl.dsp.window.fullscreen({ mode = "maximized", action = "toggle" }))              -- maximized
+hl.bind(M .. "+SHIFT" .. "+" .. "F", hl.dsp.window.fullscreen({ mode = "fullscreen", action = "toggle" })) -- fullscreen
 hl.bind(M .. "+SHIFT" .. "+" .. "T", hl.dsp.window.float())
 hl.bind(M .. "+" .. "W", hl.dsp.group.toggle())
+-- M + SHIFT + W: window-rules toggle — Noctalia has no equivalent; unused
+-- hl.bind(M .. "+SHIFT" .. "+" .. "W", ...)
 
 -- [[ Mouse Move/Resize ]]
 hl.bind(M .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
@@ -289,6 +382,10 @@ hl.bind(M .. "+CTRL" .. "+" .. "UP", hl.dsp.window.move({ workspace = "e-1" }))
 hl.bind(M .. "+CTRL" .. "+" .. "U", hl.dsp.window.move({ workspace = "e+1" }))
 hl.bind(M .. "+CTRL" .. "+" .. "I", hl.dsp.window.move({ workspace = "e-1" }))
 
+-- [[ Workspace rename ]]
+-- Noctalia has no workspace-rename IPC; unused
+-- hl.bind("CTRL+SHIFT" .. "+" .. "R", ...)
+
 -- [[ Move to Workspace ]]
 hl.bind(M .. "+SHIFT" .. "+" .. "PAGE_DOWN", hl.dsp.window.move({ workspace = "e+1" }))
 hl.bind(M .. "+SHIFT" .. "+" .. "PAGE_UP", hl.dsp.window.move({ workspace = "e-1" }))
@@ -322,8 +419,10 @@ hl.bind(M .. "+SHIFT" .. "+" .. "MINUS", hl.dsp.exec_cmd("hyprctl dispatch resiz
 hl.bind(M .. "+SHIFT" .. "+" .. "EQUAL", hl.dsp.exec_cmd("hyprctl dispatch resizeactive 0 10%"))
 
 -- [[ Screenshots ]]
-hl.bind("Print", function() exec("grim -g \"$(slurp)\" - | wl-copy") end)
-hl.bind("CTRL" .. "+" .. "Print", hl.dsp.exec_cmd("grim - | wl-copy"))
+hl.bind("Print", hl.dsp.exec_cmd(ipc .. "screenshot-region"))
+hl.bind("CTRL" .. "+" .. "Print", hl.dsp.exec_cmd(ipc .. "screenshot-fullscreen"))
+-- ALT + Print: window screenshot not directly available; fullscreen is closest
+hl.bind("ALT" .. "+" .. "Print", hl.dsp.exec_cmd(ipc .. "screenshot-fullscreen"))
 
 -- [[ DPMS ]]
 hl.bind(M .. "+SHIFT" .. "+" .. "P", hl.dsp.dpms())

@@ -5,7 +5,7 @@
     { pkgs, ... }:
     {
       imports = [
-        self.nixosModules."desktop/dms"
+        self.nixosModules."desktop/noctalia-shell"
         self.nixosModules."profiles/gaming"
       ];
       programs.zsh.enable = true;
