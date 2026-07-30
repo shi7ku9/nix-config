@@ -48,6 +48,11 @@
         fallback = false;
       };
 
+      users.users.shiziku.extraGroups = [
+        "video"
+        "render"
+      ];
+
       networking = {
         hostName = "shiziku-laptop";
         networkmanager.enable = true;
@@ -59,7 +64,15 @@
       i18n.defaultLocale = "en_US.UTF-8";
 
       hardware.cpu.intel.npu.enable = true;
-      hardware.graphics.enable = true;
+      hardware.graphics = {
+        enable = true;
+        extraPackages = with pkgs; [
+          intel-compute-runtime
+          intel-media-driver
+          intel-vaapi-driver
+          level-zero
+        ];
+      };
 
       xdg.portal.enable = true;
       xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
@@ -69,6 +82,7 @@
         flatpak.enable = true;
       };
       programs.appimage.enable = true;
+      programs.nix-ld.enable = true;
       security.polkit.enable = true;
 
       environment.systemPackages = with pkgs; [
