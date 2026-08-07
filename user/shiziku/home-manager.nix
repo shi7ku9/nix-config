@@ -104,6 +104,7 @@
             name = "shiziku";
             email = "228161658+shi7ku9@users.noreply.github.com";
           };
+          init.defaultBranch = "main";
         };
       };
 
