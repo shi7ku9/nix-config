@@ -71,7 +71,7 @@
           };
 
           checks = {
-            nixos-test = self.nixosConfigurations.shi7ku9.config.system.build.toplevel;
+            nixos-test = self.nixosConfigurations.shi7ku9-laptop.config.system.build.toplevel;
 
             home-test = self.homeConfigurations.shi7ku9.activationPackage;
           };
