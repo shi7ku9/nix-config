@@ -1,5 +1,5 @@
 {
-  description = "shiziku's NixOS flake";
+  description = "shi7ku9's NixOS flake";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -71,9 +71,9 @@
           };
 
           checks = {
-            nixos-test = self.nixosConfigurations.shiziku-laptop.config.system.build.toplevel;
+            nixos-test = self.nixosConfigurations.shi7ku9.config.system.build.toplevel;
 
-            home-test = self.homeConfigurations.shiziku.activationPackage;
+            home-test = self.homeConfigurations.shi7ku9.activationPackage;
           };
 
           formatter = pkgs.nixfmt-tree;

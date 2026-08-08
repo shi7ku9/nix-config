@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Personal NixOS configuration flake for a single-user laptop codenamed `shiziku`. Uses **flake-parts** for structure and **import-tree** for automatic module discovery. Targets `x86_64-linux` on `nixos-unstable` with a `nixos-25.11` stable channel fallback.
+Personal NixOS configuration flake for a single-user laptop codenamed `shi7ku9`. Uses **flake-parts** for structure and **import-tree** for automatic module discovery. Targets `x86_64-linux` on `nixos-unstable` with a `nixos-25.11` stable channel fallback.
 
 Key ingredients: Hyprland compositor, home-manager, systemd-boot, PipeWire, and a curated set of user packages spanning gaming, development, and creative tools.
 
@@ -25,7 +25,7 @@ flake.nix (flake-parts entry)
 
 > **⚠ `git add` before use**: Nix flake evaluation only sees git-tracked files. Newly created `.nix` files won't be visible until staged (`git add <file>` first).
 
-**Same-key merging**: Multiple files can export the same key — import-tree merges them. Used by `hosts/laptop/default.nix` + `hosts/laptop/hardware.nix` (both export `"host/shiziku-laptop"`) and `user/shiziku/` dotfiles (all export `"user/shiziku"`).
+**Same-key merging**: Multiple files can export the same key — import-tree merges them. Used by `hosts/laptop/default.nix` + `hosts/laptop/hardware.nix` (both export `"host/shi7ku9-laptop"`) and `user/shi7ku9/` dotfiles (all export `"user/shi7ku9"`).
 
 **Dual-module pattern**: Concerns that span both NixOS and home-manager (desktops, profiles) split into paired files:
 - `system.nix` → `flake.nixosModules."…"`
@@ -33,9 +33,9 @@ flake.nix (flake-parts entry)
 
 **Composition chain**:
 1. `flake.nix` — auto-discovers all modules, defines `pkgs`/`pkgs-stable`
-2. `hosts/laptop/default.nix` — `nixosSystem` importing system modules + `user/shiziku`
-3. `user/shiziku/system.nix` — imports desktop + profile NixOS modules, creates user
-4. `user/shiziku/home-manager.nix` — imports desktop + profile + user modules, defines packages
+2. `hosts/laptop/default.nix` — `nixosSystem` importing system modules + `user/shi7ku9`
+3. `user/shi7ku9/system.nix` — imports desktop + profile NixOS modules, creates user
+4. `user/shi7ku9/home-manager.nix` — imports desktop + profile + user modules, defines packages
 
 **Channel split**: `pkgs` = `nixos-unstable` (allowUnfree); `pkgs-stable` = `nixos-25.11` (allowUnfree). Injected via `_module.args` for NixOS, `extraSpecialArgs` for home-manager.
 
@@ -50,7 +50,7 @@ flake.nix (flake-parts entry)
 | `modules/shared/desktop/` | Desktop environments — `dms` and `noctalia-shell`, each with system + home sides + Hyprland Lua configs |
 | `profiles/gaming/` | Gaming profile (system: gamemode/flatpak; home: launchers/wine/lutris; steam sub-module) |
 | `profiles/development/` | Development profile (home-manager only: language toolchains + nvf) |
-| `user/shiziku/` | User system config, home-manager config, and dotfiles |
+| `user/shi7ku9/` | User system config, home-manager config, and dotfiles |
 | `hosts/laptop/` | Laptop host definition + hardware config |
 
 ## Development Commands
@@ -63,13 +63,13 @@ nix fmt .
 nix flake check --no-build
 
 # Full build dry-run
-nix build .#nixosConfigurations.shiziku-laptop.config.system.build.toplevel
+nix build .#nixosConfigurations.shi7ku9.config.system.build.toplevel
 
 # Apply system config
-sudo nixos-rebuild switch --flake .#shiziku-laptop
+sudo nixos-rebuild switch --flake .#shi7ku9
 
 # Apply home-manager config
-home-manager switch --flake .#shiziku
+home-manager switch --flake .#shi7ku9
 ```
 
 **Pre-commit hook** (`.githooks/pre-commit`): runs `nix fmt .` then `nix flake check --no-build`. Install with:
@@ -122,8 +122,8 @@ module-folder/
 | `flake.nix` | Central orchestrator — inputs, flake-parts imports, system args, checks, formatter |
 | `hosts/laptop/default.nix` | Host entry point — `nixosSystem` invocation, module imports, hostname/locale/system packages |
 | `hosts/laptop/hardware.nix` | Hardware — kernel modules, filesystems, swap, microcode |
-| `user/shiziku/system.nix` | User-level NixOS config — creates the `shiziku` user, imports desktop + gaming |
-| `user/shiziku/home-manager.nix` | Home-manager config — packages, dotfiles, profile imports, desktop imports |
+| `user/shi7ku9/system.nix` | User-level NixOS config — creates the `shi7ku9` user, imports desktop + gaming |
+| `user/shi7ku9/home-manager.nix` | Home-manager config — packages, dotfiles, profile imports, desktop imports |
 | `modules/user/nvf/nvf.nix` | Neovim entry point — imports nvf flake module, sets theme + languages |
 | `profiles/gaming/system.nix` | Gaming system module — gamemode, flatpak |
 | `profiles/development/home-manager.nix` | Development home module — language toolchains, imports nvf |
@@ -141,8 +141,8 @@ module-folder/
 ## Testing & QA
 
 - **Flake checks** in `flake.nix` → `perSystem.checks`:
-  - `nixos-test` — builds the full `nixosConfigurations.shiziku-laptop.config.system.build.toplevel`
-  - `home-test` — builds `homeConfigurations.shiziku.activationPackage`
+  - `nixos-test` — builds the full `nixosConfigurations.shi7ku9.config.system.build.toplevel`
+  - `home-test` — builds `homeConfigurations.shi7ku9.activationPackage`
 - **Pre-commit**: `nix fmt .` + `nix flake check --no-build`
 - No dedicated test framework; correctness is validated by building the system and home configurations
 - The `.gitignore` excludes `/result` (build symlinks) and `.aider*` files

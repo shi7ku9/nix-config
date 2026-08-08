@@ -6,7 +6,7 @@
 }:
 
 {
-  flake.homeConfigurations.shiziku = withSystem "x86_64-linux" (
+  flake.homeConfigurations.shi7ku9 = withSystem "x86_64-linux" (
     ctx:
     inputs.home-manager.lib.homeManagerConfiguration {
       pkgs = ctx.pkgs;
@@ -16,12 +16,12 @@
         pkgs-stable = ctx.pkgs-stable;
       };
       modules = [
-        self.homeModules."user/shiziku"
+        self.homeModules."user/shi7ku9"
       ];
     }
   );
 
-  flake.homeModules."user/shiziku" =
+  flake.homeModules."user/shi7ku9" =
     {
       pkgs,
       pkgs-stable,
@@ -29,8 +29,8 @@
       ...
     }:
     {
-      home.username = "shiziku";
-      home.homeDirectory = "/home/shiziku";
+      home.username = "shi7ku9";
+      home.homeDirectory = "/home/shi7ku9";
 
       imports = [
         self.homeModules."desktop/noctalia-shell"
@@ -101,7 +101,7 @@
         enable = true;
         settings = {
           user = {
-            name = "shiziku";
+            name = "shi7ku9";
             email = "228161658+shi7ku9@users.noreply.github.com";
           };
           init.defaultBranch = "main";
@@ -112,7 +112,7 @@
         enable = true;
         clean.enable = true;
         clean.extraArgs = "--keep 6 --keep-since 7d";
-        flake = "/home/shiziku/.nixos";
+        flake = "/home/shi7ku9/.nixos";
       };
 
       home.stateVersion = "26.05";

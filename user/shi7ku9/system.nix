@@ -1,7 +1,7 @@
 { self, ... }:
 
 {
-  flake.nixosModules."user/shiziku" =
+  flake.nixosModules."user/shi7ku9" =
     { pkgs, ... }:
     {
       imports = [
@@ -9,8 +9,10 @@
         self.nixosModules."profiles/gaming"
       ];
       programs.zsh.enable = true;
-      users.users.shiziku = {
+      users.users.shi7ku9 = {
         isNormalUser = true;
+        home = "/home/shi7ku9";
+        createHome = true;
         extraGroups = [
           "wheel" # enable sudo
           "networkmanager"

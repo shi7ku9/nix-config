@@ -1,7 +1,7 @@
 { ... }:
 
 {
-  flake.homeModules."user/shiziku" =
+  flake.homeModules."user/shi7ku9" =
     { ... }:
     {
       xdg = {

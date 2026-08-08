@@ -6,7 +6,7 @@
 }:
 
 {
-  flake.nixosConfigurations.shiziku-laptop = withSystem "x86_64-linux" (
+  flake.nixosConfigurations.shi7ku9-laptop = withSystem "x86_64-linux" (
     ctx:
     inputs.nixpkgs.lib.nixosSystem {
       modules = [
@@ -19,12 +19,12 @@
         )
         self.nixosModules.accept-features
         # self.nixosModules.nixpkgs
-        self.nixosModules."host/shiziku-laptop"
+        self.nixosModules."host/shi7ku9-laptop"
       ];
     }
   );
 
-  flake.nixosModules."host/shiziku-laptop" =
+  flake.nixosModules."host/shi7ku9-laptop" =
     { pkgs, ... }:
     {
 
@@ -36,7 +36,7 @@
         self.nixosModules."services/keyd"
         self.nixosModules."services/docker"
 
-        self.nixosModules."user/shiziku"
+        self.nixosModules."user/shi7ku9"
       ];
 
       nix.settings = {
@@ -48,13 +48,13 @@
         fallback = false;
       };
 
-      users.users.shiziku.extraGroups = [
+      users.users.shi7ku9.extraGroups = [
         "video"
         "render"
       ];
 
       networking = {
-        hostName = "shiziku-laptop";
+        hostName = "shi7ku9-laptop";
         networkmanager.enable = true;
         firewall.trustedInterfaces = [ "wlp1s0" ];
       };
