@@ -16,7 +16,7 @@
         syntaxHighlighting.enable = true;
 
         shellAliases = {
-          ll = "exa --icons auto -l";
+          ll = "eza --icons auto -l";
         };
         history.size = 1000;
 

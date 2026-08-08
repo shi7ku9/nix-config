@@ -23,9 +23,9 @@ flake.nix (flake-parts entry)
 ```
 `import-tree` maps the filesystem path to the module key. No manual `imports` needed.
 
-> **⚠ `git add` before use**: Nix flake evaluation only sees git-tracked files. Newly created `.nix` files won't be visible until staged (`git add <file>` first).
+> **⚠ `git add` before use**: Git-based flakes only see git-tracked files — this is a property of Nix flake evaluation itself, not of import-tree. Newly created `.nix` files won't be visible until staged (`git add <file>` first).
 
-**Same-key merging**: Multiple files can export the same key — import-tree merges them. Used by `hosts/laptop/default.nix` + `hosts/laptop/hardware.nix` (both export `"host/shi7ku9-laptop"`) and `user/shi7ku9/` dotfiles (all export `"user/shi7ku9"`).
+**Same-key merging**: Multiple files can export the same key — import-tree merges them. Used by `hosts/laptop/default.nix` + `hosts/laptop/hardware.nix` (both export `"host/shi7ku9-laptop"`), `user/shi7ku9/` dotfiles (all export `"user/shi7ku9"`), and `user/shi7ku9/packages/` category files (each exports `"user/shi7ku9"` with a `home.packages` slice — zero wiring needed).
 
 **Dual-module pattern**: Concerns that span both NixOS and home-manager (desktops, profiles) split into paired files:
 - `system.nix` → `flake.nixosModules."…"`
@@ -50,7 +50,7 @@ flake.nix (flake-parts entry)
 | `modules/shared/desktop/` | Desktop environments — `dms` and `noctalia-shell`, each with system + home sides + Hyprland Lua configs |
 | `profiles/gaming/` | Gaming profile (system: gamemode/flatpak; home: launchers/wine/lutris; steam sub-module) |
 | `profiles/development/` | Development profile (home-manager only: language toolchains + nvf) |
-| `user/shi7ku9/` | User system config, home-manager config, and dotfiles |
+| `user/shi7ku9/` | User system config, home-manager config, dotfiles, and `packages/` (categorized `home.packages` slices, same-key merged) |
 | `hosts/laptop/` | Laptop host definition + hardware config |
 
 ## Development Commands
@@ -123,7 +123,7 @@ module-folder/
 | `hosts/laptop/default.nix` | Host entry point — `nixosSystem` invocation, module imports, hostname/locale/system packages |
 | `hosts/laptop/hardware.nix` | Hardware — kernel modules, filesystems, swap, microcode |
 | `user/shi7ku9/system.nix` | User-level NixOS config — creates the `shi7ku9` user, imports desktop + gaming |
-| `user/shi7ku9/home-manager.nix` | Home-manager config — packages, dotfiles, profile imports, desktop imports |
+| `user/shi7ku9/home-manager.nix` | Home-manager config — profile/desktop/module imports, `programs.git`/`nh`; packages live in `user/shi7ku9/packages/` |
 | `modules/user/nvf/nvf.nix` | Neovim entry point — imports nvf flake module, sets theme + languages |
 | `profiles/gaming/system.nix` | Gaming system module — gamemode, flatpak |
 | `profiles/development/home-manager.nix` | Development home module — language toolchains, imports nvf |
