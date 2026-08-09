@@ -19,6 +19,7 @@
         traceroute
 
         # utils
+        bubblewrap
         ripgrep
         eza
         sedutil

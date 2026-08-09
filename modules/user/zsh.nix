@@ -8,6 +8,12 @@
         enable = true;
 
         presets = [ "plain-text-symbols" ];
+
+        settings.custom.sandbox = {
+          when = ''[ -n "$SANDBOX" ]'';
+          command = "true";
+          format = "via [sandbox](bold red)";
+        };
       };
       programs.zsh = {
         enable = true;
