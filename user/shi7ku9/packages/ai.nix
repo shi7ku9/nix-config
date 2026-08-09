@@ -5,7 +5,6 @@
     { pkgs, ... }:
     {
       home.packages = with pkgs; [
-        aider-chat
         skills
       ];
     };
