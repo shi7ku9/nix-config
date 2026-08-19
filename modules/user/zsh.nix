@@ -4,6 +4,8 @@
   flake.homeModules.zsh =
     { pkgs, ... }:
     {
+      home.sessionPath = [ "$HOME/.local/bin" ];
+
       programs.starship = {
         enable = true;
 
