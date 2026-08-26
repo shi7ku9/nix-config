@@ -16,7 +16,6 @@
         extraGroups = [
           "wheel" # enable sudo
           "networkmanager"
-          "docker"
         ];
         shell = pkgs.zsh;
       };
