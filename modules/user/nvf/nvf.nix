@@ -8,10 +8,14 @@
 
       programs.nvf = {
         enable = true;
-        defaultEditor = true;
+        defaultEditor = false;
 
         settings = {
           vim = {
+            # Disable the `vi`/`vim` → `neovim` symlink created by `mnw` so that `pkgs.vim` takes effect.
+            viAlias = false;
+            vimAlias = false;
+
             # — Theme: catppuccin frappe —
             theme = {
               enable = true;

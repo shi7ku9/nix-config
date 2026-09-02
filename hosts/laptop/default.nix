@@ -107,6 +107,11 @@
         level-zero
       ];
 
+      environment.variables = {
+        EDITOR = "vim";
+        VISUAL = "vim";
+      };
+
       system.stateVersion = "25.11"; # Did you read the comment? NO, I can't read !!!
     };
 

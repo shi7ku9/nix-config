@@ -33,6 +33,7 @@
         self.homeModules."profiles/development"
 
         self.homeModules.zsh
+        self.homeModules.editor
         self.homeModules.input-method
         self.homeModules.icon-fonts
       ];
