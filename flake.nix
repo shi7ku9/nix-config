@@ -5,6 +5,8 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
 
+    llm-agents.url = "github:numtide/llm-agents.nix";
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -56,18 +58,22 @@
       };
 
       perSystem =
-        { pkgs, system, ... }:
+        { ... }:
+        let
+          system = "x86_64-linux";
+          pkgsUnstable = import inputs.nixpkgs {
+            inherit system;
+            config.allowUnfree = true;
+          };
+          pkgsStable = import inputs.nixpkgs-stable {
+            inherit system;
+            config.allowUnfree = true;
+          };
+        in
         {
           _module.args = {
-            pkgs = import inputs.nixpkgs {
-              inherit system;
-              config.allowUnfree = true;
-            };
-
-            pkgs-stable = import inputs.nixpkgs-stable {
-              inherit system;
-              config.allowUnfree = true;
-            };
+            pkgs = pkgsUnstable;
+            pkgs-stable = pkgsStable;
           };
 
           checks = {
@@ -76,7 +82,7 @@
             home-test = self.homeConfigurations.shi7ku9.activationPackage;
           };
 
-          formatter = pkgs.nixfmt-tree;
+          formatter = pkgsUnstable.nixfmt-tree;
         };
     };
 }
