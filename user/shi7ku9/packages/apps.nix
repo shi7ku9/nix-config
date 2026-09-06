@@ -8,11 +8,22 @@
       inputs,
       ...
     }:
+    let
+      zen-unwrapped =
+        inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.zen-browser-unwrapped.overrideAttrs
+          (old: {
+            # Current nixpkgs wrapFirefox reads withFFmpeg; the Zen flake only exposes the legacy flag.
+            passthru = (old.passthru or { }) // {
+              withFFmpeg = true;
+            };
+          });
+      zen-browser = pkgs.wrapFirefox zen-unwrapped { pname = "zen-browser"; };
+    in
     {
       home.packages =
         (with pkgs; [
           kitty
-          inputs.zen-browser.packages.x86_64-linux.default
+          zen-browser
           vesktop
         ])
         ++ (with pkgs-stable; [
