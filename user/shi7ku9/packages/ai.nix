@@ -8,6 +8,7 @@
     in
     {
       home.packages = with agentPkgs; [
+        apm
         skills
         omp
         claude-code
