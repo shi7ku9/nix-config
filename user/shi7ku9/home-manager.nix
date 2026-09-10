@@ -22,7 +22,7 @@
   );
 
   flake.homeModules."user/shi7ku9" =
-    { ... }:
+    { pkgs, ... }:
     {
       home.username = "shi7ku9";
       home.homeDirectory = "/home/shi7ku9";
@@ -54,6 +54,24 @@
         clean.enable = true;
         clean.extraArgs = "--keep 6 --keep-since 7d";
         flake = "/home/shi7ku9/.nixos";
+      };
+
+      systemd.user.services.podman-prune = {
+        Unit.Description = "Prune rootless Podman resources";
+        Service = {
+          Type = "oneshot";
+          ExecStart = "${pkgs.podman}/bin/podman system prune -f";
+        };
+      };
+
+      systemd.user.timers.podman-prune = {
+        Unit.Description = "Prune rootless Podman resources weekly";
+        Timer = {
+          OnCalendar = "weekly";
+          Persistent = true;
+          RandomizedDelaySec = "30m";
+        };
+        Install.WantedBy = [ "timers.target" ];
       };
 
       home.stateVersion = "26.05";

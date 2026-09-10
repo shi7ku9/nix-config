@@ -34,7 +34,7 @@
         self.nixosModules."services/sound-service"
         self.nixosModules."services/bluetooth"
         self.nixosModules."services/keyd"
-        self.nixosModules."services/docker"
+        self.nixosModules."services/podman"
         self.nixosModules."services/envfs"
 
         self.nixosModules."user/shi7ku9"

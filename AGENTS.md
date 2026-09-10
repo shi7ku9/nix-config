@@ -4,7 +4,7 @@
 
 Personal NixOS configuration flake for a single-user laptop codenamed `shi7ku9`. Uses **flake-parts** for structure and **import-tree** for automatic module discovery. Targets `x86_64-linux` with `nixos-unstable` as the primary package set and `nixos-25.11` exposed as an opt-in `pkgs-stable` package set, not an automatic fallback.
 
-Key ingredients: Hyprland compositor with Noctalia Shell currently active (DMS retained as an alternative), home-manager, systemd-boot, PipeWire, Docker, envfs, and a curated set of user packages spanning AI, gaming, development, and creative tools.
+Key ingredients: Hyprland compositor with Noctalia Shell currently active (DMS retained as an alternative), home-manager, systemd-boot, PipeWire, rootless Podman with Docker CLI compatibility, envfs, and a curated set of user packages spanning AI, gaming, development, and creative tools.
 
 ## Architecture & Data Flow
 
@@ -44,7 +44,7 @@ Do not infer a key from the filesystem path. `import-tree` handles discovery, wh
 | Directory | Purpose |
 |---|---|
 | `modules/nixos/system/` | Bootloader configs |
-| `modules/nixos/services/` | System services (bluetooth, Docker, envfs, keyd, power, sound) |
+| `modules/nixos/services/` | System services (bluetooth, Podman, envfs, keyd, power, sound) |
 | `modules/user/` | Home-manager modules (Zsh/starship, editor, fonts, input method, nvf) |
 | `modules/user/nvf/` | Neovim config split across 5 files (entry, plugins, options, LSP, keymaps) |
 | `modules/shared/desktop/` | Desktop environments — `noctalia-shell` is active; `dms` is an alternative. Each has system + home sides + a Hyprland Lua config |
@@ -143,7 +143,7 @@ module-folder/
 ## Operational & Security Notes
 
 - `hosts/laptop/default.nix` enables OpenSSH, envfs, `nix-ld`, and AppImage support, and trusts `wlp1s0` in the firewall. These are host-specific policies; review them before copying the host module.
-- Docker is enabled with automatic pruning, but the user is intentionally not in the `docker` group. Do not assume unprivileged Docker daemon access.
+- Podman is enabled for rootless use with a Docker-compatible CLI alias; rootless pruning runs through a Home Manager user timer. Do not assume a Docker daemon, Docker socket, or privileged container access.
 - `user/shi7ku9/dotfile/zsh.nix` intentionally routes `omp`, `claude`, and `opencode` through `nono` wrappers (`omp-run`, `claude-run`, `opencode-run`). The direct commands are shadowed to prevent bypassing the sandbox.
 - The `sandbox` alias uses bubblewrap with a read-only outer filesystem, writable current directory/cache, and a temporary `/tmp`; `SANDBOX=1` marks the shell prompt. The shell sources credentials from `~/.serect/.env`; never commit, print, or copy that file.
 
