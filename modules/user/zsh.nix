@@ -26,7 +26,8 @@
         shellAliases = {
           ll = "eza --icons auto -l";
         };
-        history.size = 1000;
+        history.size = 100000;
+        history.save = 50000;
 
         history.ignorePatterns = [
           "rm *"
