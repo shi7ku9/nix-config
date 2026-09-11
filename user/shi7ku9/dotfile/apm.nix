@@ -7,7 +7,7 @@
       home.file.".apm/config.json".text = ''
         {
           "auto_integrate": true,
-          "install_target": "codex,claude,opencode"
+          "install_target": "codex,opencode"
         }
       '';
 

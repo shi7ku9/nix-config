@@ -144,7 +144,7 @@ module-folder/
 
 - `hosts/laptop/default.nix` enables OpenSSH, envfs, `nix-ld`, and AppImage support, and trusts `wlp1s0` in the firewall. These are host-specific policies; review them before copying the host module.
 - Podman is enabled for rootless use with a Docker-compatible CLI alias; rootless pruning runs through a Home Manager user timer. Do not assume a Docker daemon, Docker socket, or privileged container access.
-- `user/shi7ku9/dotfile/zsh.nix` intentionally routes `omp`, `claude`, and `opencode` through `nono` wrappers (`omp-run`, `claude-run`, `opencode-run`). The direct commands are shadowed to prevent bypassing the sandbox.
+- `user/shi7ku9/dotfile/zsh.nix` intentionally routes `omp` through the `nono` wrapper `omp-run`; `opencode` runs directly.
 - The `sandbox` alias uses bubblewrap with a read-only outer filesystem, writable current directory/cache, and a temporary `/tmp`; `SANDBOX=1` marks the shell prompt. The shell sources credentials from `~/.serect/.env`; never commit, print, or copy that file.
 
 ## Testing & QA
