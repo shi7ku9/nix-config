@@ -21,7 +21,6 @@
     in
     {
       home.packages = with agentPkgs; [
-        apm
         skills
         omp
         chatgpt
