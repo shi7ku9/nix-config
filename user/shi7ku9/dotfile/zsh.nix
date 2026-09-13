@@ -11,8 +11,8 @@
           '';
         };
         initContent = ''
-          if [[ -f ~/.serect/.env ]] then
-            source ~/.serect/.env
+          if [[ -f ~/.secret/.env ]] then
+            source ~/.secret/.env
           fi
 
           omp-run() {
