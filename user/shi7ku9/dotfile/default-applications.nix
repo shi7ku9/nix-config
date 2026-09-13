@@ -10,9 +10,10 @@
         mimeApps = {
           enable = true;
           defaultApplications = {
-            "text/html" = [ "zen-browser.desktop" ];
-            "x-scheme-handler/http" = [ "zen-browser.desktop" ];
-            "x-scheme-handler/https" = [ "zen-browser.desktop" ];
+            "text/html" = [ "zen.desktop" ];
+            "application/pdf" = [ "zen.desktop" ];
+            "x-scheme-handler/http" = [ "zen.desktop" ];
+            "x-scheme-handler/https" = [ "zen.desktop" ];
           };
         };
       };
