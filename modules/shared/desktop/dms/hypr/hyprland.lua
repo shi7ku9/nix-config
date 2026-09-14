@@ -388,6 +388,7 @@ hl.bind(M .. "+SHIFT" .. "+" .. "MINUS", hl.dsp.exec_cmd("hyprctl dispatch resiz
 hl.bind(M .. "+SHIFT" .. "+" .. "EQUAL", hl.dsp.exec_cmd("hyprctl dispatch resizeactive 0 10%"))
 
 -- [[ Screenshots ]]
+hl.bind(M .. "+SHIFT" .. "+" .. "S", hl.dsp.exec_cmd("dms screenshot"))
 hl.bind("Print", hl.dsp.exec_cmd("dms screenshot"))
 hl.bind("CTRL" .. "+" .. "Print", hl.dsp.exec_cmd("dms screenshot full"))
 hl.bind("ALT" .. "+" .. "Print", hl.dsp.exec_cmd("dms screenshot window"))

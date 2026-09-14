@@ -419,6 +419,7 @@ hl.bind(M .. "+SHIFT" .. "+" .. "MINUS", hl.dsp.exec_cmd("hyprctl dispatch resiz
 hl.bind(M .. "+SHIFT" .. "+" .. "EQUAL", hl.dsp.exec_cmd("hyprctl dispatch resizeactive 0 10%"))
 
 -- [[ Screenshots ]]
+hl.bind(M .. "+SHIFT" .. "+" .. "S", hl.dsp.exec_cmd(ipc .. "screenshot-region"))
 hl.bind("Print", hl.dsp.exec_cmd(ipc .. "screenshot-region"))
 hl.bind("CTRL" .. "+" .. "Print", hl.dsp.exec_cmd(ipc .. "screenshot-fullscreen"))
 -- ALT + Print: window screenshot not directly available; fullscreen is closest
