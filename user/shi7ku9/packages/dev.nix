@@ -6,6 +6,8 @@
     {
       home.packages = with pkgs; [
         git
+        gh
+        pnpm
         wl-clipboard
         zed-editor
         vscodium

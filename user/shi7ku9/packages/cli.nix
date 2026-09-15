@@ -18,6 +18,9 @@
         netcat
         traceroute
 
+        # terminal
+        mdterm
+
         # utils
         bubblewrap
         ripgrep

@@ -23,6 +23,9 @@
       home.packages =
         (with pkgs; [
           kitty
+          chromium
+          mpv
+          localsend
           zen-browser
           vesktop
         ])
