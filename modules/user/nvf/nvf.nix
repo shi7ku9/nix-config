@@ -41,7 +41,10 @@
               zig.enable = true;
               clang.enable = true;
               bash.enable = true;
-              markdown.enable = true;
+              markdown = {
+                enable = true;
+                lsp.servers = [ "rumdl" ];
+              };
             };
           };
         };
