@@ -10,14 +10,15 @@
     in
     {
       home.packages =
-        (with agentPkgs; [
-          skills
-          omp
+        (with pkgs; [
           codex
-          opencode
           nono
+          opencode
         ])
-        ++ [ codex-desktop ];
+        ++ [
+          agentPkgs.omp
+          codex-desktop
+        ];
 
       home.sessionVariables.CODEX_OZONE_PLATFORM = "wayland";
     };
