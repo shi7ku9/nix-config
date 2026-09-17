@@ -155,3 +155,7 @@ module-folder/
 - **Pre-commit**: `nix fmt .` + `nix flake check --no-build`
 - No dedicated test framework or VM test; the checks validate the system and home-manager derivations, while `--no-build` only evaluates them
 - The `.gitignore` excludes `/result` (build symlinks) and `.aider*` files
+
+## Commit Messages
+
+- Do not use Conventional Commits.
