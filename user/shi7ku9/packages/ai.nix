@@ -9,16 +9,12 @@
         inputs.codex-desktop-linux.packages.${pkgs.stdenv.hostPlatform.system}.codex-desktop;
     in
     {
-      home.packages =
-        (with pkgs; [
-          codex
-          nono
-          opencode
-        ])
-        ++ [
-          agentPkgs.omp
-          codex-desktop
-        ];
+      home.packages = [
+        agentPkgs.codex
+        agentPkgs.omp
+        agentPkgs.opencode
+        codex-desktop
+      ];
 
       home.sessionVariables.CODEX_OZONE_PLATFORM = "wayland";
     };
