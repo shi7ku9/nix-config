@@ -36,6 +36,7 @@
         self.nixosModules."services/keyd"
         self.nixosModules."services/podman"
         self.nixosModules."services/envfs"
+        self.nixosModules."services/gnome-keyring"
 
         self.nixosModules."user/shi7ku9"
       ];
