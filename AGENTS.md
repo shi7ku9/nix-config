@@ -128,7 +128,7 @@ module-folder/
 | `modules/user/nvf/nvf.nix` | Neovim entry point — imports nvf flake module, sets theme + languages |
 | `profiles/gaming/system.nix` | Gaming system module — gamemode and flatpak; Steam/gamescope are merged from `profiles/gaming/programs/steam.nix` |
 | `profiles/development/home-manager.nix` | Development home module — language toolchains, imports nvf |
-| `user/shi7ku9/packages/ai.nix` | AI CLI packages from `llm-agents.nix` plus the ChatGPT Community desktop application from `codex-desktop-linux` |
+| `user/shi7ku9/packages/ai.nix` | AI CLI packages from `llm-agents.nix` plus the ChatGPT desktop application (`chatgpt`) from `llm-agents.nix` |
 
 ## Runtime/Tooling Preferences
 
