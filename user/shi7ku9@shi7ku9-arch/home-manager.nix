@@ -6,7 +6,7 @@
 }:
 
 {
-  flake.homeConfigurations.shi7ku9 = withSystem "x86_64-linux" (
+  flake.homeConfigurations."shi7ku9@shi7ku9-arch" = withSystem "x86_64-linux" (
     ctx:
     inputs.home-manager.lib.homeManagerConfiguration {
       pkgs = ctx.pkgs;

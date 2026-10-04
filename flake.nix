@@ -42,7 +42,7 @@
         {
           _module.args.pkgs = pkgsUnstable;
 
-          checks.home-test = self.homeConfigurations.shi7ku9.activationPackage;
+          checks.home-test = self.homeConfigurations."shi7ku9@shi7ku9-arch".activationPackage;
 
           formatter = pkgsUnstable.nixfmt-tree;
         };

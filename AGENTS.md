@@ -29,7 +29,7 @@ flake.nix (flake-parts entry)
 
 **Composition chain**:
 1. `flake.nix` — auto-discovers modules, defines `pkgs` (nixos-unstable, allowUnfree)
-2. `user/shi7ku9@shi7ku9-arch/home-manager.nix` — defines `homeConfigurations.shi7ku9`, enables `targets.genericLinux`, imports `profiles/development`
+2. `user/shi7ku9@shi7ku9-arch/home-manager.nix` — defines `homeConfigurations."shi7ku9@shi7ku9-arch"`, enables `targets.genericLinux`, imports `profiles/development`
 3. `profiles/development/home-manager.nix` — language toolchains + Nix tooling, imports `nvf`
 4. `modules/user/nvf/*.nix` — Neovim config (same-key `nvf` modules merged by flake-parts)
 
@@ -40,7 +40,7 @@ flake.nix (flake-parts entry)
 | `modules/user/` | Home-manager modules: `zsh` (+ starship), `git`, `kitty`, `direnv` |
 | `modules/user/nvf/` | Neovim config split across 5 files (entry, plugins, options, LSP, keymaps) |
 | `profiles/development/` | Development profile: language toolchains, Nix tooling, nvf |
-| `user/shi7ku9@shi7ku9-arch/` | Home-manager entry (`homeConfigurations.shi7ku9`) |
+| `user/shi7ku9@shi7ku9-arch/` | Home-manager entry (`homeConfigurations."shi7ku9@shi7ku9-arch"`) |
 
 ## Development Commands
 
@@ -52,8 +52,8 @@ nix fmt .
 nix flake check --no-build
 
 # Apply home-manager config
-nix run home-manager -- switch --flake .#shi7ku9   # first time
-home-manager switch --flake .#shi7ku9              # afterwards
+nix run home-manager -- switch --flake ".#shi7ku9@shi7ku9-arch"   # first time
+home-manager switch --flake ".#shi7ku9@shi7ku9-arch"              # afterwards
 ```
 
 **Pre-commit hook** (`.githooks/pre-commit`): runs `nix fmt .` then `nix flake check --no-build`. Install with:
