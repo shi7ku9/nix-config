@@ -8,7 +8,7 @@
 
       programs.nvf = {
         enable = true;
-        defaultEditor = false;
+        defaultEditor = true;
 
         settings = {
           vim = {
