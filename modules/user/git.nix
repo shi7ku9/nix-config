@@ -10,7 +10,14 @@
           email = "228161658+shi7ku9@users.noreply.github.com";
         };
         init.defaultBranch = "main";
+        merge.conflictStyle = "zdiff3";
       };
+    };
+
+    programs.delta = {
+      enable = true;
+      enableGitIntegration = true;
+      options.navigate = true;
     };
   };
 }
