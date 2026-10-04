@@ -15,6 +15,14 @@
           ignoreAllDups = true;
           share = true;
         };
+
+        # F13 does nothing: kitty's CSI u encoding, and the terminfo (xterm) one.
+        initContent = ''
+          noop-widget() { :; }
+          zle -N noop-widget
+          bindkey '\e[57376u' noop-widget
+          bindkey '\e[1;2P' noop-widget
+        '';
       };
 
       programs.starship = {
