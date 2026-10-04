@@ -23,7 +23,13 @@
         clang-tools
 
         nodejs
+        pnpm
         python3
+
+        # nix
+        nixd
+        nil
+        nixfmt
       ];
     };
 }
