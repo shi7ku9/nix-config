@@ -25,6 +25,10 @@
     imports = [
       self.homeModules."profiles/development"
 
+      self.homeModules.zsh
+      self.homeModules.git
+      self.homeModules.kitty
+      self.homeModules.direnv
     ];
 
     # Non-NixOS (Arch): integrate with the host system
