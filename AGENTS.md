@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Personal Home Manager flake for `shi7ku9`, running on **Arch Linux** (non-NixOS). It manages the **development toolchain**, **Neovim (nvf)**, and a fresh set of dotfiles (zsh + starship, git, kitty, direnv). Uses **flake-parts** for structure and **import-tree** for automatic module discovery. Targets `x86_64-linux` with `nixos-unstable`.
+Personal Home Manager flake for `shi7ku9`, running on **Arch Linux** (non-NixOS). It manages the **development toolchain**, **Neovim (nvf)**, and a fresh set of dotfiles (zsh + starship, git, kitty, direnv, ssh-agent). Uses **flake-parts** for structure and **import-tree** for automatic module discovery. Targets `x86_64-linux` with `nixos-unstable`.
 
 This repo used to be a full NixOS configuration. The system, desktop (Hyprland/Noctalia), gaming, input method, fonts and AI CLIs were deliberately removed, and the old dotfiles were rewritten from scratch rather than carried over:
 - System, desktop, GPU-related software and system services → pacman.
@@ -15,7 +15,7 @@ Do not re-add those concerns here.
 ```
 flake.nix (flake-parts entry)
   └─ import-tree auto-discovers all .nix files under:
-       ├─ modules/    → flake.homeModules (nvf, zsh, git, kitty, direnv)
+       ├─ modules/    → flake.homeModules (nvf, zsh, git, kitty, direnv, ssh)
        ├─ user/       → flake.homeModules / flake.homeConfigurations
        └─ profiles/   → flake.homeModules
 ```
@@ -37,7 +37,7 @@ flake.nix (flake-parts entry)
 
 | Directory | Purpose |
 |---|---|
-| `modules/user/` | Home-manager modules: `zsh` (+ starship), `git`, `kitty`, `direnv` |
+| `modules/user/` | Home-manager modules: `zsh` (+ starship), `git`, `kitty`, `direnv`, `ssh` (agent) |
 | `modules/user/nvf/` | Neovim config split across 5 files (entry, plugins, options, LSP, keymaps) |
 | `profiles/development/` | Development profile: language toolchains, Nix tooling, nvf |
 | `user/shi7ku9@shi7ku9-arch/` | Home-manager entry (`homeConfigurations."shi7ku9@shi7ku9-arch"`) |

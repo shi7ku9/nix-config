@@ -29,6 +29,7 @@
       self.homeModules.git
       self.homeModules.kitty
       self.homeModules.direnv
+      self.homeModules.ssh
     ];
 
     # Non-NixOS (Arch): integrate with the host system
