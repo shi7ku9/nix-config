@@ -25,6 +25,20 @@
         '';
       };
 
+      programs.eza = {
+        enable = true;
+        # Aliases are defined explicitly below so every one carries --color=auto.
+        enableZshIntegration = false;
+      };
+
+      programs.zsh.shellAliases = {
+        ls = "eza --color=auto";
+        l = "eza -l --color=auto";
+        ll = "eza -lah --color=auto --git";
+        la = "eza -a --color=auto";
+        lt = "eza --tree --level=2 --color=auto";
+      };
+
       programs.starship = {
         enable = true;
         enableZshIntegration = true;
