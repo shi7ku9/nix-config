@@ -30,6 +30,13 @@
     # Non-NixOS (Arch): integrate with the host system
     targets.genericLinux.enable = true;
 
+    programs.nh = {
+      enable = true;
+      clean.enable = true;
+      clean.extraArgs = "--keep 6 --keep-since 7d";
+      flake = "/home/shi7ku9/Code/nix-config";
+    };
+
     home.stateVersion = "26.05";
   };
 }
