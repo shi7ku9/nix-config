@@ -39,6 +39,12 @@
         lt = "eza --tree --level=2 --color=auto";
       };
 
+      # Ctrl-R history, Ctrl-T files, Alt-C cd.
+      programs.fzf = {
+        enable = true;
+        enableZshIntegration = true;
+      };
+
       programs.starship = {
         enable = true;
         enableZshIntegration = true;
