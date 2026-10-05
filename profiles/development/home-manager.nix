@@ -24,8 +24,6 @@
         clang
         clang-tools
 
-        python3
-
         # nix
         nixd
         nil
