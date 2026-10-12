@@ -24,6 +24,8 @@
         clang
         clang-tools
 
+        ast-grep
+
         # nix
         nixd
         nil
@@ -61,6 +63,9 @@
         };
       };
       programs.pnpm.enable = true;
+
+      # nixpkgs only ships the `ast-grep` binary, not the `sg` shorthand.
+      programs.zsh.shellAliases.sg = "ast-grep";
 
       # Python >= 3.13 reads PYTHON_HISTORY for the REPL history file.
       home.sessionVariables.PYTHON_HISTORY = "${stateHome}/python_history";
