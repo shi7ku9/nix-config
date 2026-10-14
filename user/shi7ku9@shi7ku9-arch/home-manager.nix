@@ -42,6 +42,15 @@
       flake = "/home/shi7ku9/Code/nix-config";
     };
 
+    # Weekly `nix flake update` + `home-manager switch` via a systemd user timer
+    services.home-manager.autoUpgrade = {
+      enable = true;
+      frequency = "weekly";
+      useFlake = true;
+      flakeDir = "/home/shi7ku9/Code/nix-config";
+      preSwitchCommands = [ "nix flake update" ];
+    };
+
     home.stateVersion = "26.05";
   };
 }
