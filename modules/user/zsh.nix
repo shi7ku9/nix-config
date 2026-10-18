@@ -8,6 +8,8 @@
         enable = true;
         autosuggestion.enable = true;
         syntaxHighlighting.enable = true;
+        # Without this, zsh picks the vi keymap because $EDITOR (nvim) contains "vi".
+        defaultKeymap = "emacs";
 
         history = {
           size = 50000;
