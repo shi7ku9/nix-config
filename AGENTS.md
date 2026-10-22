@@ -15,7 +15,7 @@ Do not re-add those concerns here.
 ```
 flake.nix (flake-parts entry)
   └─ import-tree auto-discovers all .nix files under:
-       ├─ modules/    → flake.homeModules (nvf, zsh, git, kitty, direnv, ssh)
+       ├─ modules/    → flake.homeModules (nvf, zsh, git, kitty, direnv, ssh, appimage-sync)
        ├─ user/       → flake.homeModules / flake.homeConfigurations
        └─ profiles/   → flake.homeModules
 ```
@@ -37,7 +37,7 @@ flake.nix (flake-parts entry)
 
 | Directory | Purpose |
 |---|---|
-| `modules/user/` | Home-manager modules: `zsh` (+ starship), `git`, `kitty`, `direnv`, `ssh` (agent) |
+| `modules/user/` | Home-manager modules: `zsh` (+ starship), `git`, `kitty`, `direnv`, `ssh` (agent), `appimage-sync` (~/Appimage → launcher entries) |
 | `modules/user/nvf/` | Neovim config split across 5 files (entry, plugins, options, LSP, keymaps) |
 | `profiles/development/` | Development profile: language toolchains, Nix tooling, nvf |
 | `user/shi7ku9@shi7ku9-arch/` | Home-manager entry (`homeConfigurations."shi7ku9@shi7ku9-arch"`) |

@@ -30,6 +30,7 @@
       self.homeModules.kitty
       self.homeModules.direnv
       self.homeModules.ssh
+      self.homeModules.appimage-sync
     ];
 
     # Non-NixOS (Arch): integrate with the host system
