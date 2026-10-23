@@ -555,9 +555,8 @@ check "Hang gets a fallback entry" key_is "$APPIMAGE_DIR/Hang.AppImage" Icon app
 
 # ---------------------------------------------------------------------------
 new_env change-during-run
-# The systemd path watch is inactive while the oneshot runs (verified with a
-# transient path unit), so an AppImage that lands after the directory was
-# listed must still be picked up by the same run.
+# An AppImage that lands after the directory was listed must still be picked
+# up by the same manual invocation.
 mkfake "$W/dl/Late.AppImage" ""
 mkfake "$APPIMAGE_DIR/First.AppImage" "" late "$W/dl/Late.AppImage" "$APPIMAGE_DIR/Late.AppImage"
 check "run exits 0" run_sync

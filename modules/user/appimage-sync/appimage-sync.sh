@@ -1,4 +1,4 @@
-# Sync AppImages in ~/Appimage to desktop entries so app launchers can find them.
+# Manually sync AppImages in ~/Appimage to desktop entries for app launchers.
 #  - chmod +x every AppImage
 #  - create/update ~/.local/share/applications/appimage-sync-<name>.desktop
 #  - extract the embedded icon (and Name/Categories) when possible
@@ -191,9 +191,8 @@ if (( changed )); then
     command -v kbuildsycoca6 >/dev/null && kbuildsycoca6 >/dev/null 2>&1
 fi
 
-# The path watch is inactive while the oneshot runs. Keep rescanning until the
-# source settles; the service timeout bounds continuous changes, and its timer
-# retries afterward as well as picking up external symlink-target changes.
+# Include AppImages that arrive during this manual invocation by rescanning
+# until the source directory settles.
 if [[ $(dir_sig) != "$start_sig" ]]; then
     log "rescan  $SRC_DIR changed during the run"
     exec "$0"
