@@ -37,7 +37,7 @@ flake.nix (flake-parts entry)
 
 | Directory | Purpose |
 |---|---|
-| `modules/user/` | Home-manager modules: `zsh` (+ starship), `git`, `kitty`, `direnv`, `ssh` (agent), `appimage-sync` (manual ~/Appimage → launcher entries) |
+| `modules/user/` | Home-manager modules: `zsh` (+ starship), `git`, `kitty`, `direnv`, `ssh` (agent), `appimage-sync` (manual ~/Appimage → launcher entries, plus `appimage-unbundle` to strip bundled libs) |
 | `modules/user/nvf/` | Neovim config split across 5 files (entry, plugins, options, LSP, keymaps) |
 | `profiles/development/` | Development profile: language toolchains, Nix tooling, nvf |
 | `user/shi7ku9@shi7ku9-arch/` | Home-manager entry (`homeConfigurations."shi7ku9@shi7ku9-arch"`) |
@@ -57,6 +57,9 @@ home-manager switch --flake ".#shi7ku9@shi7ku9-arch"              # afterwards
 
 # Manually sync ~/Appimage to launcher entries
 appimage-sync
+
+# Repack an AppImage to use host libs instead of its bundled ones
+appimage-unbundle <file.AppImage> <main-binary-name>
 ```
 
 **Pre-commit hook** (`.githooks/pre-commit`): runs `nix fmt .` then `nix flake check --no-build`. Install with:
