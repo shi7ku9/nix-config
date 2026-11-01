@@ -5,9 +5,19 @@
 # Usage: appimage-unbundle <file.AppImage> <main-binary-name>
 # The original is kept next to it as <file.AppImage>.orig (not *.appimage, so
 # appimage-sync ignores it). An existing .orig is never overwritten.
+# APPIMAGE_UNBUNDLE_TIMEOUT: positive whole seconds per runtime call (default
+# 30), followed by a 5-second SIGTERM grace period before SIGKILL.
+
+set -euo pipefail
 
 if [ $# -ne 2 ]; then
     echo "usage: appimage-unbundle <file.AppImage> <main-binary-name>" >&2
+    exit 2
+fi
+
+runtime_timeout=${APPIMAGE_UNBUNDLE_TIMEOUT:-30}
+if [[ ! $runtime_timeout =~ ^[1-9][0-9]*$ ]]; then
+    echo "APPIMAGE_UNBUNDLE_TIMEOUT must be a positive whole number of seconds" >&2
     exit 2
 fi
 
@@ -23,13 +33,56 @@ if [ -e "$src.orig" ] || [ -L "$src.orig" ]; then
 fi
 
 work=$(mktemp -d)
-# Extracted trees may contain read-only directories.
-trap 'chmod -R u+w "$work"; rm -rf "$work"' EXIT
+runtime_pid=
+cleanup() {
+    local status=$?
+    trap - EXIT HUP INT TERM
+    if [[ -n $runtime_pid ]]; then
+        # timeout owns a process group, including runtime children. Stop all
+        # writers before removing the tree, even if they ignore SIGTERM.
+        kill -KILL -- "-$runtime_pid" 2>/dev/null || true
+        kill -KILL "$runtime_pid" 2>/dev/null || true
+        wait "$runtime_pid" 2>/dev/null || true
+    fi
+    # Extracted trees may contain read-only directories.
+    chmod -R u+w "$work" || true
+    rm -rf "$work"
+    exit "$status"
+}
+trap cleanup EXIT
+trap 'exit 129' HUP
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
-offset=$("$src" --appimage-offset)
+run_runtime() {
+    local status
+    # Background + wait lets shell traps run promptly. Keep stdout in a file:
+    # command substitution could wait forever on a pipe inherited by a child.
+    (cd "$work" && exec timeout -k 5 "$runtime_timeout" "$src" "$1") \
+        </dev/null >"$2" &
+    runtime_pid=$!
+    if wait "$runtime_pid"; then status=0; else status=$?; fi
+    # A runtime may leave children behind even after it exits.
+    kill -KILL -- "-$runtime_pid" 2>/dev/null || true
+    runtime_pid=
+    if ((status != 0)); then
+        case $status in
+            124|137) echo "AppImage runtime $1 timed out or was killed (status $status)" >&2 ;;
+            *) echo "AppImage runtime $1 failed (status $status)" >&2 ;;
+        esac
+        exit "$status"
+    fi
+}
+
+run_runtime --appimage-offset "$work/offset"
+offset=$(cat "$work/offset")
+if [[ ! $offset =~ ^[0-9]+$ || ! $offset =~ [1-9] ]]; then
+    echo "invalid AppImage offset: $offset" >&2
+    exit 1
+fi
 head -c "$offset" "$src" > "$work/runtime"
 
-(cd "$work" && "$src" --appimage-extract >/dev/null)
+run_runtime --appimage-extract /dev/null
 root="$work/squashfs-root"
 find "$root" -type d ! -perm -u+w -exec chmod u+w {} +
 [ -x "$root/usr/bin/$bin" ] || { echo "not found: usr/bin/$bin" >&2; exit 1; }

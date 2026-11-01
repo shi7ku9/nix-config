@@ -17,6 +17,8 @@ UNBUNDLE=${APPIMAGE_UNBUNDLE:-appimage-unbundle}
 ROOT=$(mktemp -d "${TMPDIR:-/tmp}/appimage-unbundle-test.XXXXXX")
 RUNTIME_SIZE=4096
 unset LD_LIBRARY_PATH GIO_MODULE_DIR APP_EXIT
+unset TEST_RUNTIME_FLAG TEST_RUNTIME_MODE TEST_RUNTIME_PIDS
+unset APPIMAGE_UNBUNDLE_TIMEOUT
 
 passes=0
 fails=0
@@ -54,7 +56,7 @@ new_env() {
 # run_unbundle <args...>: run with a hard time limit; output in $W/last.out,
 # exit code in $RC
 run_unbundle() {
-    timeout -k 5 60 env TMPDIR="$UTMP" "$UNBUNDLE" "$@" >"$W/last.out" 2>&1
+    timeout -k 5 "${TEST_LIMIT:-60}" env TMPDIR="$UTMP" "$UNBUNDLE" "$@" >"$W/last.out" 2>&1
     RC=$?
     sed 's/^/        | /' "$W/last.out"
 }
@@ -69,6 +71,26 @@ runtime() {
         printf 'off=%d\n' "$RUNTIME_SIZE"
         cat <<'EOF'
 self=$(readlink -f "$0")
+if [[ ${1-} == "${TEST_RUNTIME_FLAG-}" ]]; then
+    # Leave a partial, read-only extraction behind before hanging/failing.
+    if [[ $1 == --appimage-extract ]]; then
+        mkdir -p squashfs-root/partial
+        echo partial >squashfs-root/partial/file
+        chmod 555 squashfs-root/partial
+    fi
+    case ${TEST_RUNTIME_MODE-} in
+        fail) exit 42 ;;
+        invalid-offset) echo invalid; exit 0 ;;
+        hang|ignore-term|orphan)
+            [[ $TEST_RUNTIME_MODE != ignore-term ]] || trap '' TERM
+            sleep 300 &
+            printf '%s\n%s\n' "$BASHPID" "$!" >"$TEST_RUNTIME_PIDS"
+            [[ $TEST_RUNTIME_MODE != orphan ]] || exit 42
+            wait
+            exit 0
+            ;;
+    esac
+fi
 case ${1-} in
 --appimage-offset)
     echo "$off"
@@ -187,6 +209,26 @@ root_owned() { # every entry in the image is 0/0
 }
 same_file() { cmp -s "$1" "$2"; }
 no_orig() { [[ ! -e $1.orig && ! -L $1.orig ]]; }
+
+# Killed descendants may briefly remain as zombies until init reaps them.
+# Poll only for a bounded interval; kill leftovers so a regression cannot
+# leave a 300-second fixture behind after the test itself finishes.
+runtime_stopped() {
+    local pid state attempt live
+    [[ -s $TEST_RUNTIME_PIDS ]] || return 1
+    for ((attempt = 0; attempt < 50; attempt++)); do
+        live=0
+        while read -r pid; do
+            state=$(cat "/proc/$pid/stat" 2>/dev/null) || state=
+            state=${state##*) }
+            [[ -z $state || $state == Z* ]] || live=1
+        done <"$TEST_RUNTIME_PIDS"
+        ((live)) || return 0
+        sleep 0.1
+    done
+    while read -r pid; do kill -KILL "$pid" 2>/dev/null || true; done <"$TEST_RUNTIME_PIDS"
+    return 1
+}
 
 # runs_unbundled <image> <expected argv...>: running the image passes the
 # arguments through untouched and no bundled-lib environment is set up
@@ -349,6 +391,79 @@ done
 run_unbundle "$W/missing.AppImage" app
 check "missing file: fails" eval '! rc_is 0'
 check "temp dir cleaned up" tmp_clean
+
+# ---------------------------------------------------------------------------
+# Both calls execute arbitrary runtime code. Assert the tool's own deadline
+# fires, rather than accepting a kill by run_unbundle's outer safety net.
+for flag in --appimage-offset --appimage-extract; do
+    for mode in hang ignore-term fail orphan; do
+        new_env "runtime-${flag#--appimage-}-$mode"
+        img=$W/App.AppImage
+        payload "$W/payload" app
+        mkimage "$img" "$W/payload"
+        cp "$img" "$W/backup"
+        export TEST_RUNTIME_FLAG=$flag TEST_RUNTIME_MODE=$mode TEST_RUNTIME_PIDS=$W/pids
+        export APPIMAGE_UNBUNDLE_TIMEOUT=1
+        TEST_LIMIT=12 run_unbundle "$img" app
+        case $mode in
+            hang) check "runtime deadline: exit 124" rc_is 124 ;;
+            ignore-term) check "SIGKILL escalation: exit 137" rc_is 137 ;;
+            fail|orphan) check "runtime failure status preserved" rc_is 42 ;;
+        esac
+        check "reports the failed runtime operation" output_has "AppImage runtime $flag"
+        check "no success message" eval '! output_has "done:"'
+        check "image untouched, no .orig" eval 'same_file "$img" "$W/backup" && no_orig "$img"'
+        [[ $mode == fail ]] || check "runtime and child stopped" runtime_stopped
+        check "partial extraction and temp dir cleaned" tmp_clean
+        unset TEST_RUNTIME_FLAG TEST_RUNTIME_MODE TEST_RUNTIME_PIDS APPIMAGE_UNBUNDLE_TIMEOUT
+    done
+done
+
+# ---------------------------------------------------------------------------
+new_env invalid-offset
+img=$W/App.AppImage
+payload "$W/payload" app
+mkimage "$img" "$W/payload"
+cp "$img" "$W/backup"
+export TEST_RUNTIME_FLAG=--appimage-offset TEST_RUNTIME_MODE=invalid-offset
+run_unbundle "$img" app
+check "non-numeric offset rejected" rc_is 1
+check "offset diagnostic" output_has "invalid AppImage offset"
+check "image untouched, no .orig" eval 'same_file "$img" "$W/backup" && no_orig "$img"'
+check "temp dir cleaned" tmp_clean
+unset TEST_RUNTIME_FLAG TEST_RUNTIME_MODE
+
+for value in 0 -1 invalid; do
+    APPIMAGE_UNBUNDLE_TIMEOUT=$value run_unbundle "$img" app
+    check "invalid timeout $value rejected" rc_is 2
+    check "invalid timeout explained" output_has "APPIMAGE_UNBUNDLE_TIMEOUT must be"
+    check "image untouched, no .orig" eval 'same_file "$img" "$W/backup" && no_orig "$img"'
+    check "temp dir cleaned" tmp_clean
+done
+
+# ---------------------------------------------------------------------------
+# Send each signal to the tool alone, not the runtime's separate process
+# group. The outer timeout is only a safety net; preserve-status lets us
+# assert the script's signal exit status and cleanup.
+for flag in --appimage-offset --appimage-extract; do
+    for spec in HUP:129 INT:130 TERM:143; do
+        new_env "interrupt-${flag#--appimage-}-${spec%:*}"
+        img=$W/App.AppImage
+        payload "$W/payload" app
+        mkimage "$img" "$W/payload"
+        cp "$img" "$W/backup"
+        export TEST_RUNTIME_FLAG=$flag TEST_RUNTIME_MODE=ignore-term TEST_RUNTIME_PIDS=$W/pids
+        export APPIMAGE_UNBUNDLE_TIMEOUT=30
+        timeout -k 2 15 timeout --foreground --preserve-status -s "${spec%:*}" -k 10 1 \
+            env TMPDIR="$UTMP" "$UNBUNDLE" "$img" app >"$W/last.out" 2>&1
+        RC=$?
+        check "signal status preserved" rc_is "${spec#*:}"
+        check "runtime and child stopped" runtime_stopped
+        check "image untouched, no .orig" eval 'same_file "$img" "$W/backup" && no_orig "$img"'
+        check "temp dir cleaned" tmp_clean
+        unset TEST_RUNTIME_FLAG TEST_RUNTIME_MODE TEST_RUNTIME_PIDS APPIMAGE_UNBUNDLE_TIMEOUT
+    done
+done
 
 # ---------------------------------------------------------------------------
 new_env read-only-dirs
