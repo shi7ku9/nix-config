@@ -54,15 +54,19 @@
         telemetry.mode = "off";
       };
 
-      # Node: the Nix store is read-only, so `npm i -g` needs a writable prefix.
+      # Node comes from pacman; only the user config is managed here.
       programs.npm = {
         enable = true;
+        package = null;
         settings = {
           prefix = "${dataHome}/npm";
           cache = "${cacheHome}/npm";
         };
       };
-      programs.pnpm.enable = true;
+      programs.pnpm = {
+        enable = true;
+        package = null;
+      };
 
       # nixpkgs only ships the `ast-grep` binary, not the `sg` shorthand.
       programs.zsh.shellAliases.sg = "ast-grep";

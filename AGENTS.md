@@ -7,6 +7,7 @@ Personal Home Manager flake for `shi7ku9`, running on **Arch Linux** (non-NixOS)
 This repo used to be a full NixOS configuration. The system, desktop (Hyprland/Noctalia), gaming, input method, fonts and AI CLIs were deliberately removed, and the old dotfiles were rewritten from scratch rather than carried over:
 - System, desktop, GPU-related software and system services → pacman.
 - AI CLIs and fast-moving apps → AUR (Nix lags behind).
+- Node.js and pnpm → pacman (only their user config is managed here).
 
 Do not re-add those concerns here.
 
